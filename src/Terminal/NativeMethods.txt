@@ -1,0 +1,10 @@
+﻿SetConsoleCP
+GetConsoleCP
+GetConsoleOutputCP
+GetStdHandle
+WriteFile
+ReadFile
+SetConsoleMode
+GetConsoleMode
+GetFileType
+FlushConsoleInputBuffer

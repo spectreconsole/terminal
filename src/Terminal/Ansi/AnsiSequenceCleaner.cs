@@ -1,4 +1,5 @@
-﻿using System.Text;
+using System;
+using System.Text;
 
 namespace Spectre.Terminal.Ansi
 {
@@ -6,10 +7,10 @@ namespace Spectre.Terminal.Ansi
     {
         internal static AnsiSequenceCleaner Instance { get; } = new AnsiSequenceCleaner();
 
-        public string Run(string text)
+        public string Run(ReadOnlyMemory<char> buffer)
         {
             var context = new StringBuilder();
-            AnsiSequence.Interpret(Instance, context, text);
+            AnsiSequence.Interpret(Instance, context, buffer);
             return context.ToString();
         }
 

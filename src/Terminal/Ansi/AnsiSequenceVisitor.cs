@@ -1,5 +1,3 @@
-using System;
-
 namespace Spectre.Terminal.Ansi
 {
     public abstract class AnsiSequenceVisitor<TContext>

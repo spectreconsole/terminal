@@ -1,33 +1,79 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.InteropServices;
 
 namespace Spectre.Terminal
 {
-    public sealed class Terminal
+    public sealed class Terminal : ITerminal
     {
+        private static readonly Lazy<ITerminal> _instance = new Lazy<ITerminal>(() => Terminal.Create());
+
+        private readonly ITerminalDriver _driver;
+        private readonly object _lock;
+        private bool _isRawMode;
+
         public TerminalInput Input { get; }
         public TerminalOutput Output { get; }
         public TerminalOutput Error { get; }
 
+        public static ITerminal Instance => _instance.Value;
+
         public Terminal(ITerminalDriver driver)
         {
-            if (driver is null)
-            {
-                throw new ArgumentNullException(nameof(driver));
-            }
+            _driver = driver ?? throw new ArgumentNullException(nameof(driver));
+            _lock = new object();
 
-            Input = new TerminalInput(driver.Input);
-            Output = new TerminalOutput(driver.Output);
-            Error = new TerminalOutput(driver.Error);
+            Input = new TerminalInput(_driver.Input);
+            Output = new TerminalOutput(_driver.Output);
+            Error = new TerminalOutput(_driver.Error);
         }
 
-        public static Terminal Create()
+        ~Terminal()
         {
-            // Use the fallback terminal for now
-            return new Terminal(new FallbackTerminal());
+            Dispose();
+        }
+
+        public static ITerminal Create()
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                return new Terminal(new WindowsDriver());
+            }
+
+            throw new PlatformNotSupportedException();
+        }
+
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+            DisableRawMode();
+        }
+
+        public bool EnableRawMode()
+        {
+            lock (_lock)
+            {
+                if (_isRawMode)
+                {
+                    return true;
+                }
+
+                _isRawMode = _driver.EnableRawMode();
+                return _isRawMode;
+            }
+        }
+
+        public bool DisableRawMode()
+        {
+            lock (_lock)
+            {
+                if (!_isRawMode)
+                {
+                    return true;
+                }
+
+                _isRawMode = _driver.DisableRawMode();
+                return !_isRawMode;
+            }
         }
     }
 }

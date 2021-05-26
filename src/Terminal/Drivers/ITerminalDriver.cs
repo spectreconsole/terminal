@@ -2,10 +2,13 @@ namespace Spectre.Terminal
 {
     public interface ITerminalDriver
     {
-        TerminalCaps Caps { get; }
+        bool SupportsAnsi { get; }
 
         ITerminalReader Input { get; }
         ITerminalWriter Output { get; }
         ITerminalWriter Error { get; }
+
+        bool EnableRawMode();
+        bool DisableRawMode();
     }
 }
