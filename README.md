@@ -4,23 +4,41 @@ A terminal abstraction with platform specific drivers.
 
 ## Features
 
-- [ ] STDIN
-  - [ ] Read
-  - [ ] Get/Set encoding
-  - [ ] Redirect to custom reader
-  - [ ] Is handle redirected?
+- [x] STDIN
+  - [x] Read
+  - [x] Get encoding
+  - [ ] Set encoding
+  - [x] Redirect to custom reader
+  - [x] Is handle redirected?
 - [ ]  STDOUT/STDERR
-  - [ ] Write
-  - [ ] Get/Set encoding
-  - [ ] Redirect to custom writer
-  - [ ] Is handle redirected?
-- [ ] Raw mode
+  - [x] Write
+  - [x] Get encoding
+  - [ ] Set encoding
+  - [x] Redirect to custom writer
+  - [x] Is handle redirected?
+- [x] Raw mode
 - [ ] Signals
   - [ ] SIGINT
   - [ ] SIGQUIT
 - [ ] Window
   - [ ] Width
   - [ ] Height
+
+## ANSI emulation (Windows)
+
+- [x] CUU (Cursor up)
+- [x] CUD (Cursor down)
+- [x] CUF (Cursor forward)
+- [x] CUB (Cursor back)
+- [x] CNL (Cursor next line)
+- [x] CPL (Cursor previous line)
+- [x] CHA (Cursor horizontal absolute)
+- [ ] CUP (Cursor position)
+- [ ] ED (Erase in display)
+- [ ] EL (Erase in line)
+- [ ] SGR (Selection graphic rendition)
+- [x] SCP (Save current cursor position)
+- [x] RCP (Restore saved cursor position)
 
 ## Acknowledgement
 
