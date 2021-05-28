@@ -8,6 +8,7 @@ namespace Spectre.Terminal
     {
         public SafeHandle Handle { get; }
         public ITerminalWriter Writer { get; }
+        public Encoding Encoding => Writer.Encoding;
 
         public COORD? StoredCursorPosition { get; set; }
 

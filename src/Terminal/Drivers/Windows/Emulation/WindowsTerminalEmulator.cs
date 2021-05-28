@@ -9,7 +9,7 @@ namespace Spectre.Terminal
         public void Write(WindowsTerminalState state, ReadOnlySpan<byte> buffer)
         {
             // TODO: Not very efficient
-            var text = state.Writer.Encoding.GetString(buffer);
+            var text = state.Encoding.GetString(buffer);
             AnsiSequence.Interpret(this, state, text);
         }
 
@@ -114,7 +114,7 @@ namespace Spectre.Terminal
         void IAnsiSequenceVisitor<WindowsTerminalState>.PrintText(PrintText op, WindowsTerminalState state)
         {
             // TODO: Not very efficient
-            var bytes = state.Writer.Encoding.GetBytes(op.Text.ToArray());
+            var bytes = state.Encoding.GetBytes(op.Text.ToArray());
             state.Writer.Write(new ReadOnlySpan<byte>(bytes));
         }
 
