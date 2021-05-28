@@ -9,7 +9,7 @@ namespace Spectre.Terminal
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                return new Terminal(new WindowsDriver());
+                return new Terminal(new WindowsDriver(emulate: true));
             }
 
             throw new PlatformNotSupportedException();

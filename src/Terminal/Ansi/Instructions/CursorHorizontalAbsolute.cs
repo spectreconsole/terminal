@@ -2,14 +2,14 @@ namespace Spectre.Terminal.Ansi
 {
     public sealed class CursorHorizontalAbsolute : AnsiInstruction
     {
-        public int Count { get; }
+        public int Column { get; }
 
         public CursorHorizontalAbsolute(int count)
         {
-            Count = count;
+            Column = count;
         }
 
-        public override void Accept<TContext>(IAnsiSequenceVisitor<TContext> visitor, TContext context)
+        public override void Accept<TState>(IAnsiSequenceVisitor<TState> visitor, TState context)
         {
             visitor.CursorHorizontalAbsolute(this, context);
         }

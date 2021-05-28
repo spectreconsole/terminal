@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
+using Microsoft.Windows.Sdk;
 
 namespace Spectre.Terminal
 {
@@ -7,6 +8,8 @@ namespace Spectre.Terminal
     {
         public SafeHandle Handle { get; }
         public ITerminalWriter Writer { get; }
+
+        public COORD? StoredCursorPosition { get; set; }
 
         public WindowsTerminalState(SafeHandle handle, ITerminalWriter writer)
         {

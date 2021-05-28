@@ -1,4 +1,4 @@
-﻿SetConsoleCP
+SetConsoleCP
 GetConsoleCP
 GetConsoleOutputCP
 GetStdHandle
@@ -8,3 +8,6 @@ SetConsoleMode
 GetConsoleMode
 GetFileType
 FlushConsoleInputBuffer
+GetConsoleScreenBufferInfo
+SetConsoleCursorPosition
+FillConsoleOutputCharacter

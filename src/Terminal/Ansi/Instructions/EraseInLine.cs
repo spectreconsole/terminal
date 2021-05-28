@@ -9,7 +9,7 @@ namespace Spectre.Terminal.Ansi
             Mode = mode;
         }
 
-        public override void Accept<TContext>(IAnsiSequenceVisitor<TContext> visitor, TContext context)
+        public override void Accept<TState>(IAnsiSequenceVisitor<TState> visitor, TState context)
         {
             visitor.EraseInLine(this, context);
         }

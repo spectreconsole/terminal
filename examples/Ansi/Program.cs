@@ -24,7 +24,7 @@ namespace Examples
             terminal.ReadRaw();
             terminal.DisableRawMode();
 
-            terminal.Output.WriteLine("Goodbye!");
+            terminal.Output.WriteLine("\u001b[2JGoodbye!");
         }
     }
 }

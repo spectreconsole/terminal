@@ -2,7 +2,7 @@ namespace Spectre.Terminal.Ansi
 {
     public sealed class RestoreCursor : AnsiInstruction
     {
-        public override void Accept<TContext>(IAnsiSequenceVisitor<TContext> visitor, TContext context)
+        public override void Accept<TState>(IAnsiSequenceVisitor<TState> visitor, TState context)
         {
             visitor.RestoreCursor(this, context);
         }

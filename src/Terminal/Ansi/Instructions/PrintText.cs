@@ -11,7 +11,7 @@ namespace Spectre.Terminal.Ansi
             Text = text;
         }
 
-        public override void Accept<TContext>(IAnsiSequenceVisitor<TContext> visitor, TContext context)
+        public override void Accept<TState>(IAnsiSequenceVisitor<TState> visitor, TState context)
         {
             visitor.PrintText(this, context);
         }

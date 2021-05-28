@@ -19,7 +19,7 @@ namespace Spectre.Terminal
         ITerminalWriter ITerminalDriver.Output => Output;
         ITerminalWriter ITerminalDriver.Error => Error;
 
-        public WindowsDriver()
+        public WindowsDriver(bool emulate = false)
         {
             Input = new WindowsTerminalReader(this);
             Input.AddMode(
@@ -44,8 +44,8 @@ namespace Spectre.Terminal
                 CONSOLE_MODE.ENABLE_VIRTUAL_TERMINAL_PROCESSING);
 
             // ANSI not supported?
-            if (!(Output.GetMode(out var mode) && (mode & CONSOLE_MODE.ENABLE_VIRTUAL_TERMINAL_PROCESSING) != 0)
-                && !(Error.GetMode(out mode) && (mode & CONSOLE_MODE.ENABLE_VIRTUAL_TERMINAL_PROCESSING) != 0))
+            if (emulate || (!(Output.GetMode(out var mode) && (mode & CONSOLE_MODE.ENABLE_VIRTUAL_TERMINAL_PROCESSING) != 0)
+                && !(Error.GetMode(out mode) && (mode & CONSOLE_MODE.ENABLE_VIRTUAL_TERMINAL_PROCESSING) != 0)))
             {
                 // Wrap STDOUT and STDERR in an emulator
                 Output = new WindowsTerminalEmulatorAdapter(Output);

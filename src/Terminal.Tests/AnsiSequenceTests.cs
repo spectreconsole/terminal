@@ -48,7 +48,7 @@ namespace Spectre.Terminal.Tests
 
                 protected override void CursorHorizontalAbsolute(CursorHorizontalAbsolute instruction, StringBuilder context)
                 {
-                    context.Append($"[CHA{instruction.Count}]");
+                    context.Append($"[CHA{instruction.Column}]");
                 }
 
                 protected override void EraseInLine(EraseInLine instruction, StringBuilder context)

@@ -1,19 +1,19 @@
-﻿namespace Spectre.Terminal.Ansi
+namespace Spectre.Terminal.Ansi
 {
-    public interface IAnsiSequenceVisitor<TContext>
+    public interface IAnsiSequenceVisitor<TState>
     {
-        void CursorBack(CursorBack instruction, TContext context);
-        void CursorDown(CursorDown instruction, TContext context);
-        void CursorForward(CursorForward instruction, TContext context);
-        void CursorHorizontalAbsolute(CursorHorizontalAbsolute instruction, TContext context);
-        void CursorNextLine(CursorNextLine instruction, TContext context);
-        void CursorPosition(CursorPosition instruction, TContext context);
-        void CursorPreviousLine(CursorPreviousLine instruction, TContext context);
-        void CursorUp(CursorUp instruction, TContext context);
-        void EraseInDisplay(EraseInDisplay instruction, TContext context);
-        void EraseInLine(EraseInLine instruction, TContext context);
-        void PrintText(PrintText instruction, TContext context);
-        void RestoreCursor(RestoreCursor instruction, TContext context);
-        void SaveCursor(SaveCursor instruction, TContext context);
+        void CursorBack(CursorBack instruction, TState state);
+        void CursorDown(CursorDown instruction, TState state);
+        void CursorForward(CursorForward instruction, TState state);
+        void CursorHorizontalAbsolute(CursorHorizontalAbsolute instruction, TState state);
+        void CursorNextLine(CursorNextLine instruction, TState state);
+        void CursorPosition(CursorPosition instruction, TState state);
+        void CursorPreviousLine(CursorPreviousLine instruction, TState state);
+        void CursorUp(CursorUp instruction, TState state);
+        void EraseInDisplay(EraseInDisplay instruction, TState state);
+        void EraseInLine(EraseInLine instruction, TState state);
+        void PrintText(PrintText instruction, TState state);
+        void RestoreCursor(RestoreCursor instruction, TState state);
+        void SaveCursor(SaveCursor instruction, TState state);
     }
 }
