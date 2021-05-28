@@ -21,16 +21,10 @@ namespace Examples
             terminal.WriteLine();
             terminal.WriteLine("Press ANY key");
             terminal.WriteLine();
-
-            terminal.EnableRawMode();
             terminal.ReadRaw();
-            terminal.DisableRawMode();
 
             terminal.Write("\u001b[8;8HLOL!\u001b[0J");
-
-            terminal.EnableRawMode();
             terminal.ReadRaw();
-            terminal.DisableRawMode();
 
             terminal.Output.WriteLine("\u001b[2JGoodbye!");
         }
