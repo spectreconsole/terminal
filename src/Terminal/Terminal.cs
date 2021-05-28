@@ -1,21 +1,26 @@
 using System;
-using System.Runtime.InteropServices;
 
 namespace Spectre.Terminal
 {
     public sealed class Terminal : ITerminal
     {
-        private static readonly Lazy<ITerminal> _instance = new Lazy<ITerminal>(() => TerminalFactory.Create());
-
+        private static readonly Lazy<ITerminal> _instance;
         public static ITerminal Shared => _instance.Value;
 
         private readonly ITerminalDriver _driver;
         private readonly object _lock;
-        private bool _isRawMode;
 
-        public TerminalInput Input { get; }
-        public TerminalOutput Output { get; }
-        public TerminalOutput Error { get; }
+        public string Name => _driver.Name;
+        public bool IsRawMode { get; private set; }
+
+        public ITerminalReader Input { get; }
+        public ITerminalWriter Output { get; }
+        public ITerminalWriter Error { get; }
+
+        static Terminal()
+        {
+            _instance = new Lazy<ITerminal>(() => TerminalFactory.Create());
+        }
 
         public Terminal(ITerminalDriver driver)
         {
@@ -44,13 +49,13 @@ namespace Spectre.Terminal
         {
             lock (_lock)
             {
-                if (_isRawMode)
+                if (IsRawMode)
                 {
                     return true;
                 }
 
-                _isRawMode = _driver.EnableRawMode();
-                return _isRawMode;
+                IsRawMode = _driver.EnableRawMode();
+                return IsRawMode;
             }
         }
 
@@ -58,13 +63,13 @@ namespace Spectre.Terminal
         {
             lock (_lock)
             {
-                if (!_isRawMode)
+                if (!IsRawMode)
                 {
                     return true;
                 }
 
-                _isRawMode = _driver.DisableRawMode();
-                return !_isRawMode;
+                IsRawMode = _driver.DisableRawMode();
+                return !IsRawMode;
             }
         }
     }

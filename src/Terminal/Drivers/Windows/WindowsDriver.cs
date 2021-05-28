@@ -8,11 +8,12 @@ namespace Spectre.Terminal
         private const CONSOLE_MODE IN_MODE = CONSOLE_MODE.ENABLE_PROCESSED_INPUT | CONSOLE_MODE.ENABLE_LINE_INPUT | CONSOLE_MODE.ENABLE_ECHO_INPUT;
         private const CONSOLE_MODE OUT_MODE = CONSOLE_MODE.DISABLE_NEWLINE_AUTO_RETURN;
 
-        public bool SupportsAnsi { get; }
+        public string Name { get; } = "Windows";
+        public bool IsRawMode { get; private set; }
 
         public WindowsTerminalReader Input { get; }
-        public WindowsTerminalWriter Output { get; }
-        public WindowsTerminalWriter Error { get; }
+        public IWindowsTerminalWriter Output { get; }
+        public IWindowsTerminalWriter Error { get; }
 
         ITerminalReader ITerminalDriver.Input => Input;
         ITerminalWriter ITerminalDriver.Output => Output;
@@ -20,7 +21,7 @@ namespace Spectre.Terminal
 
         public WindowsDriver()
         {
-            Input = new WindowsTerminalReader();
+            Input = new WindowsTerminalReader(this);
             Input.AddMode(
                 CONSOLE_MODE.ENABLE_PROCESSED_INPUT |
                 CONSOLE_MODE.ENABLE_LINE_INPUT |
@@ -34,7 +35,7 @@ namespace Spectre.Terminal
                 CONSOLE_MODE.ENABLE_WRAP_AT_EOL_OUTPUT |
                 CONSOLE_MODE.DISABLE_NEWLINE_AUTO_RETURN |
                 CONSOLE_MODE.ENABLE_VIRTUAL_TERMINAL_PROCESSING);
-
+             
             Error = new WindowsTerminalWriter(STD_HANDLE_TYPE.STD_ERROR_HANDLE);
             Error.AddMode(
                 CONSOLE_MODE.ENABLE_PROCESSED_OUTPUT |
@@ -42,15 +43,13 @@ namespace Spectre.Terminal
                 CONSOLE_MODE.DISABLE_NEWLINE_AUTO_RETURN |
                 CONSOLE_MODE.ENABLE_VIRTUAL_TERMINAL_PROCESSING);
 
-            if (Output.GetMode(out var mode))
+            // ANSI not supported?
+            if (!(Output.GetMode(out var mode) && (mode & CONSOLE_MODE.ENABLE_VIRTUAL_TERMINAL_PROCESSING) != 0)
+                && !(Error.GetMode(out mode) && (mode & CONSOLE_MODE.ENABLE_VIRTUAL_TERMINAL_PROCESSING) != 0))
             {
-                // Does STDOUT support ANSI?
-                SupportsAnsi = (mode & CONSOLE_MODE.ENABLE_VIRTUAL_TERMINAL_PROCESSING) != 0;
-            }
-            else if (Error.GetMode(out mode))
-            {
-                // Does STDERR support ANSI?
-                SupportsAnsi = (mode & CONSOLE_MODE.ENABLE_VIRTUAL_TERMINAL_PROCESSING) != 0;
+                // Wrap STDOUT and STDERR in an emulator
+                Output = new WindowsTerminalEmulatorAdapter(Output);
+                Error = new WindowsTerminalEmulatorAdapter(Error);
             }
         }
 
@@ -63,6 +62,7 @@ namespace Spectre.Terminal
 
         public bool EnableRawMode()
         {
+            // TODO: Restoration of mode when failed
             if (!(Input.RemoveMode(IN_MODE) && (Output.RemoveMode(OUT_MODE) || Error.RemoveMode(OUT_MODE))))
             {
                 return false;
@@ -73,11 +73,13 @@ namespace Spectre.Terminal
                 throw new InvalidOperationException("Could not flush input buffer");
             }
 
+            IsRawMode = true;
             return true;
         }
 
         public bool DisableRawMode()
         {
+            // TODO: Restoration of mode when failed
             if (!(Input.AddMode(IN_MODE) && (Output.AddMode(OUT_MODE) || Error.AddMode(OUT_MODE))))
             {
                 return false;
@@ -88,6 +90,7 @@ namespace Spectre.Terminal
                 throw new InvalidOperationException("Could not flush input buffer");
             }
 
+            IsRawMode = false;
             return true;
         }
     }

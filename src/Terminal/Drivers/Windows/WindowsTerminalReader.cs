@@ -1,6 +1,5 @@
 using System;
 using System.Text;
-using Spectre.Terminal;
 using Microsoft.Windows.Sdk;
 using System.Runtime.InteropServices;
 
@@ -8,12 +7,16 @@ namespace Spectre.Terminal
 {
     internal sealed class WindowsTerminalReader : WindowsTerminalHandle, ITerminalReader
     {
-        public Encoding Encoding { get; }
+        private readonly WindowsDriver _driver;
 
-        public WindowsTerminalReader()
+        public Encoding Encoding { get; }
+        public bool IsRawMode => _driver.IsRawMode;
+
+        public WindowsTerminalReader(WindowsDriver driver)
             : base(STD_HANDLE_TYPE.STD_INPUT_HANDLE)
         {
             Encoding = EncodingHelper.GetEncodingFromCodePage((int)PInvoke.GetConsoleCP());
+            _driver = driver;
         }
 
         public unsafe int Read(Span<byte> buffer)

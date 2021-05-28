@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Spectre.Terminal.Ansi
 {
-    internal sealed class AnsiSequenceCleaner : AnsiSequenceVisitor<StringBuilder>
+    internal sealed class AnsiSequenceCleaner : IAnsiSequenceVisitor<StringBuilder>
     {
         internal static AnsiSequenceCleaner Instance { get; } = new AnsiSequenceCleaner();
 
@@ -14,9 +14,57 @@ namespace Spectre.Terminal.Ansi
             return context.ToString();
         }
 
-        protected internal override void PrintText(PrintText instruction, StringBuilder context)
+        void IAnsiSequenceVisitor<StringBuilder>.PrintText(PrintText instruction, StringBuilder context)
         {
             context.Append(instruction.Text);
+        }
+
+        void IAnsiSequenceVisitor<StringBuilder>.CursorBack(CursorBack instruction, StringBuilder context)
+        {
+        }
+
+        void IAnsiSequenceVisitor<StringBuilder>.CursorDown(CursorDown instruction, StringBuilder context)
+        {
+        }
+
+        void IAnsiSequenceVisitor<StringBuilder>.CursorForward(CursorForward instruction, StringBuilder context)
+        {
+        }
+
+        void IAnsiSequenceVisitor<StringBuilder>.CursorHorizontalAbsolute(CursorHorizontalAbsolute instruction, StringBuilder context)
+        {
+        }
+
+        void IAnsiSequenceVisitor<StringBuilder>.CursorNextLine(CursorNextLine instruction, StringBuilder context)
+        {
+        }
+
+        void IAnsiSequenceVisitor<StringBuilder>.CursorPosition(CursorPosition instruction, StringBuilder context)
+        {
+        }
+
+        void IAnsiSequenceVisitor<StringBuilder>.CursorPreviousLine(CursorPreviousLine instruction, StringBuilder context)
+        {
+        }
+
+        void IAnsiSequenceVisitor<StringBuilder>.CursorUp(CursorUp instruction, StringBuilder context)
+        {
+        }
+
+        void IAnsiSequenceVisitor<StringBuilder>.EraseInDisplay(EraseInDisplay instruction, StringBuilder context)
+        {
+        }
+
+        void IAnsiSequenceVisitor<StringBuilder>.EraseInLine(EraseInLine instruction, StringBuilder context)
+        {
+        }
+
+        void IAnsiSequenceVisitor<StringBuilder>.RestoreCursor(RestoreCursor instruction, StringBuilder context)
+        {
+        }
+
+        void IAnsiSequenceVisitor<StringBuilder>.SaveCursor(SaveCursor instruction, StringBuilder context)
+        {
         }
     }
 }

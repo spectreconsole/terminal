@@ -4,7 +4,8 @@ namespace Spectre.Terminal
 {
     public interface ITerminalDriver : IDisposable
     {
-        bool SupportsAnsi { get; }
+        string Name { get; }
+        bool IsRawMode { get; }
 
         ITerminalReader Input { get; }
         ITerminalWriter Output { get; }

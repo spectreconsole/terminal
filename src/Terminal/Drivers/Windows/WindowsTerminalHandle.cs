@@ -1,7 +1,6 @@
 using Microsoft.Windows.Sdk;
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
 
 namespace Spectre.Terminal

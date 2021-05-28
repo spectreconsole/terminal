@@ -4,6 +4,20 @@ namespace Spectre.Terminal
 {
     public static class ITerminalExtensions
     {
+        public static byte? ReadRaw(this ITerminal terminal)
+        {
+            try
+            {
+                terminal.EnableRawMode();
+                Span<byte> span = stackalloc byte[1];
+                return terminal.Input.Read(span) == 1 ? span[0] : null;
+            }
+            finally
+            {
+                terminal.DisableRawMode();
+            }
+        }
+
         public static void Write(this ITerminal terminal, ReadOnlySpan<char> value)
         {
             terminal.Output.Write(value);

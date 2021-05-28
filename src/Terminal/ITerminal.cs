@@ -1,12 +1,15 @@
-﻿using System;
+using System;
 
 namespace Spectre.Terminal
 {
     public interface ITerminal : IDisposable
     {
-        TerminalInput Input { get; }
-        TerminalOutput Output { get; }
-        TerminalOutput Error { get; }
+        string Name { get; }
+        bool IsRawMode { get; }
+
+        ITerminalReader Input { get; }
+        ITerminalWriter Output { get; }
+        ITerminalWriter Error { get; }
 
         bool EnableRawMode();
         bool DisableRawMode();

@@ -1,12 +1,21 @@
 using System;
 using System.Text;
-using Spectre.Terminal;
 using Microsoft.Windows.Sdk;
 using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Spectre.Terminal
 {
-    internal sealed class WindowsTerminalWriter : WindowsTerminalHandle, ITerminalWriter
+    internal interface IWindowsTerminalWriter : ITerminalWriter, IDisposable
+    {
+        SafeHandle Handle { get; }
+
+        bool GetMode([NotNullWhen(true)] out CONSOLE_MODE? mode);
+        bool AddMode(CONSOLE_MODE mode);
+        bool RemoveMode(CONSOLE_MODE mode);
+    }
+
+    internal sealed class WindowsTerminalWriter : WindowsTerminalHandle, IWindowsTerminalWriter
     {
         public Encoding Encoding { get; }
 

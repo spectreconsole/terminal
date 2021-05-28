@@ -14,12 +14,12 @@ namespace Spectre.Terminal.Ansi
             return AnsiSequenceCleaner.Instance.Run(buffer);
         }
 
-        public static void Interpret<TContext>(AnsiSequenceVisitor<TContext> visitor, TContext context, string text)
+        public static void Interpret<TContext>(IAnsiSequenceVisitor<TContext> visitor, TContext context, string text)
         {
             Interpret(visitor, context, text.AsMemory());
         }
 
-        public static void Interpret<TContext>(AnsiSequenceVisitor<TContext> visitor, TContext context, ReadOnlyMemory<char> buffer)
+        public static void Interpret<TContext>(IAnsiSequenceVisitor<TContext> visitor, TContext context, ReadOnlyMemory<char> buffer)
         {
             if (visitor is null)
             {

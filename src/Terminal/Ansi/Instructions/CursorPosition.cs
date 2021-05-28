@@ -11,7 +11,7 @@ namespace Spectre.Terminal.Ansi
             Row = row;
         }
 
-        public override void Accept<TContext>(AnsiSequenceVisitor<TContext> visitor, TContext context)
+        public override void Accept<TContext>(IAnsiSequenceVisitor<TContext> visitor, TContext context)
         {
             visitor.CursorPosition(this, context);
         }
