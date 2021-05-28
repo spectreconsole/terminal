@@ -78,18 +78,32 @@ namespace Spectre.Terminal
                 return;
             }
 
-            if (op.Mode == 2 || op.Mode == 3)
+            if (op.Mode == 0)
             {
-                var terminalSize = info.dwSize.X * info.dwSize.Y;
-                if (PInvoke.FillConsoleOutputCharacter(state.Handle, ' ', (uint)terminalSize, new COORD(), out _))
+                // Delete everything after the cursor
+                var skip = ((info.dwCursorPosition.Y - 1) * info.dwSize.X) + info.dwCursorPosition.X;
+                var take = (info.dwSize.X * info.dwSize.Y) - skip;
+                PInvoke.FillConsoleOutputCharacter(state.Handle, ' ', (uint)take, new COORD()
                 {
-                    // Set the cursor to home
-                    SetCursorPosition(state, new COORD
-                    {
-                        X = 0,
-                        Y = 0,
-                    });
-                }
+                    X = info.dwCursorPosition.X,
+                    Y = info.dwCursorPosition.Y,
+                }, out _);
+            }
+            else if (op.Mode == 1)
+            {
+                // Delete everything before the cursor
+                var skip = (info.dwCursorPosition.Y * info.dwSize.X) + info.dwCursorPosition.X;
+                PInvoke.FillConsoleOutputCharacter(state.Handle, ' ', (uint)skip, new COORD()
+                {
+                    X = 0,
+                    Y = 0,
+                }, out _);
+            }
+            else if (op.Mode == 2)
+            {
+                // Delete everything
+                var terminalSize = info.dwSize.X * info.dwSize.Y;
+                PInvoke.FillConsoleOutputCharacter(state.Handle, ' ', (uint)terminalSize, new COORD(), out _);
             }
         }
 
@@ -136,6 +150,9 @@ namespace Spectre.Terminal
 
         private static void SetCursorPosition(WindowsTerminalState state, COORD coordinates)
         {
+            coordinates.X = (short)Math.Max(coordinates.X - 1, 0);
+            coordinates.Y = (short)Math.Max(coordinates.Y - 1, 0);
+
             PInvoke.SetConsoleCursorPosition(state.Handle, coordinates);
         }
     }

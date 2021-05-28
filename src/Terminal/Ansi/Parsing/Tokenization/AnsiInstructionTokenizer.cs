@@ -66,8 +66,7 @@ namespace Spectre.Terminal.Ansi
                 token = null;
                 return false;
             }
-
-            if (char.IsNumber(current))
+            else if (char.IsNumber(current))
             {
                 var start = buffer.Position;
                 while (buffer.CanRead)
@@ -89,13 +88,22 @@ namespace Spectre.Terminal.Ansi
 
                 return true;
             }
-
-            if (char.IsLetter(current))
+            else if (char.IsLetter(current))
             {
                 var start = buffer.Position;
                 buffer.Discard();
                 token = new AnsiSequenceToken(
                     AnsiSequenceTokenType.Character,
+                    buffer.Slice(start, start + 1));
+
+                return true;
+            }
+            else if(current == ';')
+            {
+                var start = buffer.Position;
+                buffer.Discard();
+                token = new AnsiSequenceToken(
+                    AnsiSequenceTokenType.Delimiter,
                     buffer.Slice(start, start + 1));
 
                 return true;
