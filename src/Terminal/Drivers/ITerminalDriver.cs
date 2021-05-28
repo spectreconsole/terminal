@@ -1,6 +1,8 @@
+using System;
+
 namespace Spectre.Terminal
 {
-    public interface ITerminalDriver
+    public interface ITerminalDriver : IDisposable
     {
         bool SupportsAnsi { get; }
 

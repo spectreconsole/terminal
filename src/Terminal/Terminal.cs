@@ -5,7 +5,9 @@ namespace Spectre.Terminal
 {
     public sealed class Terminal : ITerminal
     {
-        private static readonly Lazy<ITerminal> _instance = new Lazy<ITerminal>(() => Terminal.Create());
+        private static readonly Lazy<ITerminal> _instance = new Lazy<ITerminal>(() => TerminalFactory.Create());
+
+        public static ITerminal Shared => _instance.Value;
 
         private readonly ITerminalDriver _driver;
         private readonly object _lock;
@@ -14,8 +16,6 @@ namespace Spectre.Terminal
         public TerminalInput Input { get; }
         public TerminalOutput Output { get; }
         public TerminalOutput Error { get; }
-
-        public static ITerminal Instance => _instance.Value;
 
         public Terminal(ITerminalDriver driver)
         {
@@ -32,20 +32,12 @@ namespace Spectre.Terminal
             Dispose();
         }
 
-        public static ITerminal Create()
-        {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                return new Terminal(new WindowsDriver());
-            }
-
-            throw new PlatformNotSupportedException();
-        }
-
         public void Dispose()
         {
             GC.SuppressFinalize(this);
+
             DisableRawMode();
+            _driver.Dispose();
         }
 
         public bool EnableRawMode()

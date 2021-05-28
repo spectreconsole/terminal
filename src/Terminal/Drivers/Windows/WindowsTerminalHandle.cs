@@ -1,10 +1,12 @@
 using Microsoft.Windows.Sdk;
+using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
 
 namespace Spectre.Terminal
 {
-    internal abstract class WindowsTerminalHandle
+    internal abstract class WindowsTerminalHandle : IDisposable
     {
         public SafeHandle Handle { get; }
         public bool IsRedirected { get; }
@@ -13,6 +15,11 @@ namespace Spectre.Terminal
         {
             Handle = PInvoke.GetStdHandle_SafeHandle(handle);
             IsRedirected = !GetMode(out _) || (PInvoke.GetFileType(Handle) & 2) == 0;
+        }
+
+        public void Dispose()
+        {
+            Handle.Dispose();
         }
 
         public unsafe bool GetMode([NotNullWhen(true)] out CONSOLE_MODE? mode)

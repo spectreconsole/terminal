@@ -3,7 +3,7 @@ using Microsoft.Windows.Sdk;
 
 namespace Spectre.Terminal
 {
-    internal sealed class WindowsDriver : ITerminalDriver
+    internal sealed class WindowsDriver : ITerminalDriver, IDisposable
     {
         private const CONSOLE_MODE IN_MODE = CONSOLE_MODE.ENABLE_PROCESSED_INPUT | CONSOLE_MODE.ENABLE_LINE_INPUT | CONSOLE_MODE.ENABLE_ECHO_INPUT;
         private const CONSOLE_MODE OUT_MODE = CONSOLE_MODE.DISABLE_NEWLINE_AUTO_RETURN;
@@ -52,6 +52,13 @@ namespace Spectre.Terminal
                 // Does STDERR support ANSI?
                 SupportsAnsi = (mode & CONSOLE_MODE.ENABLE_VIRTUAL_TERMINAL_PROCESSING) != 0;
             }
+        }
+
+        public void Dispose()
+        {
+            Input.Dispose();
+            Output.Dispose();
+            Error.Dispose();
         }
 
         public bool EnableRawMode()

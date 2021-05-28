@@ -7,7 +7,7 @@ namespace Examples
     {
         public static void Main(string[] args)
         {
-            var terminal = Terminal.Instance;
+            var terminal = Terminal.Shared;
 
             terminal.WriteLine("\u001b[2J\u001b[1;1HHello World!");
             terminal.WriteLine();
