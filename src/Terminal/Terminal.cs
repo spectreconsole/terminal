@@ -68,7 +68,7 @@ namespace Spectre.Terminal
                     return true;
                 }
 
-                IsRawMode = _driver.DisableRawMode();
+                IsRawMode = !_driver.DisableRawMode();
                 return !IsRawMode;
             }
         }
