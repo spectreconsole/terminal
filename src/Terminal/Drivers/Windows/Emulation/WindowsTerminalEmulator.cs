@@ -2,7 +2,7 @@ using System;
 using Spectre.Terminal.Ansi;
 using Microsoft.Windows.Sdk;
 
-namespace Spectre.Terminal
+namespace Spectre.Terminal.Drivers
 {
     internal sealed class WindowsTerminalEmulator : IAnsiSequenceVisitor<WindowsTerminalState>
     {
@@ -10,7 +10,7 @@ namespace Spectre.Terminal
         {
             // TODO: Not very efficient
             var text = state.Encoding.GetString(buffer);
-            AnsiSequence.Interpret(this, state, text);
+            AnsiInterpreter.Interpret(this, state, text);
         }
 
         void IAnsiSequenceVisitor<WindowsTerminalState>.CursorUp(CursorUp op, WindowsTerminalState state)

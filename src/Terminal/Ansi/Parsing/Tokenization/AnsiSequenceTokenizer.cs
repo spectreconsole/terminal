@@ -4,36 +4,14 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Spectre.Terminal.Ansi
 {
-    internal static class AnsiInstructionTokenizer
+    internal static class AnsiSequenceTokenizer
     {
-        public static IReadOnlyList<AnsiInstructionToken> Tokenize(ReadOnlyMemory<char> buffer)
-        {
-            var result = new List<AnsiInstructionToken>();
-            foreach (var (span, isEscapeCode) in AnsiSequenceSplitter.Split(buffer))
-            {
-                if (isEscapeCode)
-                {
-                    var tokens = TokenizeEscapeCode(new TextBuffer(span));
-                    if (tokens.Count > 0)
-                    {
-                        result.Add(AnsiInstructionToken.Sequence(tokens));
-                    }
-                }
-                else
-                {
-                    result.Add(AnsiInstructionToken.Text(span));
-                }
-            }
-
-            return result;
-        }
-
-        private static IReadOnlyList<AnsiSequenceToken> TokenizeEscapeCode(TextBuffer buffer)
+        public static IReadOnlyList<AnsiSequenceToken> Tokenize(MemoryCursor buffer)
         {
             var result = new List<AnsiSequenceToken>();
             while (buffer.CanRead)
             {
-                if (!ReadEscapeCodeToken(buffer, out var token))
+                if (!ReadSequenceToken(buffer, out var token))
                 {
                     // Could not parse, so return an empty result
                     return Array.Empty<AnsiSequenceToken>();
@@ -45,7 +23,7 @@ namespace Spectre.Terminal.Ansi
             return result;
         }
 
-        private static bool ReadEscapeCodeToken(TextBuffer buffer, [NotNullWhen(true)] out AnsiSequenceToken? token)
+        private static bool ReadSequenceToken(MemoryCursor buffer, [NotNullWhen(true)] out AnsiSequenceToken? token)
         {
             var current = buffer.PeekChar();
 
@@ -98,7 +76,7 @@ namespace Spectre.Terminal.Ansi
 
                 return true;
             }
-            else if(current == ';')
+            else if (current == ';')
             {
                 var start = buffer.Position;
                 buffer.Discard();

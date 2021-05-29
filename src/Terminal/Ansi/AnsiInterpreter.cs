@@ -2,18 +2,8 @@ using System;
 
 namespace Spectre.Terminal.Ansi
 {
-    public static class AnsiSequence
+    public static class AnsiInterpreter
     {
-        public static string Clear(string text)
-        {
-            return AnsiSequenceCleaner.Instance.Run(text.AsMemory());
-        }
-
-        public static string Clear(ReadOnlyMemory<char> buffer)
-        {
-            return AnsiSequenceCleaner.Instance.Run(buffer);
-        }
-
         public static void Interpret<TContext>(IAnsiSequenceVisitor<TContext> visitor, TContext context, string text)
         {
             Interpret(visitor, context, text.AsMemory());
@@ -26,7 +16,7 @@ namespace Spectre.Terminal.Ansi
                 throw new ArgumentNullException(nameof(visitor));
             }
 
-            var instructions = AnsiInstructionParser.Parse(buffer);
+            var instructions = AnsiParser.Parse(buffer);
             foreach (var instruction in instructions)
             {
                 instruction.Accept(visitor, context);

@@ -5,19 +5,19 @@ using System.Linq;
 
 namespace Spectre.Terminal.Ansi
 {
-    internal sealed class AnsiInstructionParser
+    internal sealed class AnsiParser
     {
         public static IEnumerable<AnsiInstruction> Parse(ReadOnlyMemory<char> buffer)
         {
-            foreach (var token in AnsiInstructionTokenizer.Tokenize(buffer))
+            foreach (var token in Tokenize(buffer))
             {
                 if (token.IsText)
                 {
-                    yield return new PrintText(token.Span);
+                    yield return new PrintText(token.Text);
                 }
-                else
+                else if(token.IsSequence)
                 {
-                    var instruction = ParseInstruction(token.Tokens.ToArray());
+                    var instruction = ParseInstruction(token.Sequence.ToArray());
                     if (instruction != null)
                     {
                         yield return instruction;
@@ -26,14 +26,37 @@ namespace Spectre.Terminal.Ansi
             }
         }
 
+        private static IReadOnlyList<AnsiToken> Tokenize(ReadOnlyMemory<char> buffer)
+        {
+            var result = new List<AnsiToken>();
+            foreach (var (span, isSequence) in AnsiSequenceSplitter.Split(buffer))
+            {
+                if (isSequence)
+                {
+                    var tokens = AnsiSequenceTokenizer.Tokenize(new MemoryCursor(span));
+                    if (tokens.Count > 0)
+                    {
+                        result.Add(AnsiToken.CreateSequence(tokens));
+                    }
+                }
+                else
+                {
+                    result.Add(AnsiToken.CreateText(span));
+                }
+            }
+
+            return result;
+        }
+
         private static AnsiInstruction? ParseInstruction(AnsiSequenceToken[] tokens)
         {
+            // Ignore empty sequences or non-CSI sequences (for now)
             if (tokens.Length == 0 || tokens[0].Type != AnsiSequenceTokenType.Csi)
             {
                 return null;
             }
 
-            var terminal = tokens[tokens.Length - 1].AsCharacter();
+            var terminal = tokens[^1].AsCharacter();
             if (terminal == null)
             {
                 return null;

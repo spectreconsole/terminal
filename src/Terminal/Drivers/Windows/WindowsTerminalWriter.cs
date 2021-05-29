@@ -4,7 +4,7 @@ using Microsoft.Windows.Sdk;
 using System.Runtime.InteropServices;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Spectre.Terminal
+namespace Spectre.Terminal.Drivers
 {
     internal interface IWindowsTerminalWriter : ITerminalWriter, IDisposable
     {

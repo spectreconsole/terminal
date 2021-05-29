@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 
 namespace Spectre.Terminal.Ansi
 {
-    public sealed class AnsiSequenceToken
+    internal sealed class AnsiSequenceToken
     {
         public AnsiSequenceTokenType Type { get; }
         public ReadOnlyMemory<char> Content { get; set; }

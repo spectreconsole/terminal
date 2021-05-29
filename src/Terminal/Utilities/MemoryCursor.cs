@@ -1,8 +1,8 @@
 using System;
 
-namespace Spectre.Terminal.Ansi
+namespace Spectre.Terminal
 {
-    public sealed class TextBuffer
+    internal sealed class MemoryCursor
     {
         private readonly ReadOnlyMemory<char> _buffer;
         private int _position;
@@ -10,7 +10,7 @@ namespace Spectre.Terminal.Ansi
         public bool CanRead => _position < _buffer.Length;
         public int Position => _position;
 
-        public TextBuffer(ReadOnlyMemory<char> buffer)
+        public MemoryCursor(ReadOnlyMemory<char> buffer)
         {
             _buffer = buffer;
             _position = 0;

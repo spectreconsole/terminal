@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
+using Spectre.Terminal.Drivers;
 
 namespace Spectre.Terminal
 {

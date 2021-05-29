@@ -7,19 +7,6 @@ namespace Spectre.Terminal.Tests
 {
     public sealed class AnsiSequenceTests
     {
-        public sealed class TheClearMethod
-        {
-            [Fact]
-            public void Should_Clean_ANSI_Escape_Sequences()
-            {
-                // Given, When
-                var result = AnsiSequence.Clear("\u001b[2KHello \u001b[2BWorld!\u001b[1G!");
-
-                // Then
-                result.ShouldBe("Hello World!!");
-            }
-        }
-
         public sealed class TheInterpretMethod
         {
             [Fact]
@@ -30,7 +17,7 @@ namespace Spectre.Terminal.Tests
                 var state = new StringBuilder();
 
                 // When
-                AnsiSequence.Interpret(
+                AnsiInterpreter.Interpret(
                     printer, state,
                     "\u001b[2KHello \u001b[2BWorld!\u001b[1G!");
 

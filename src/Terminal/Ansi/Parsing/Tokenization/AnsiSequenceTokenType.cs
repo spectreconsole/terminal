@@ -1,6 +1,6 @@
 namespace Spectre.Terminal.Ansi
 {
-    public enum AnsiSequenceTokenType
+    internal enum AnsiSequenceTokenType
     {
         Unknown,
         Csi,
