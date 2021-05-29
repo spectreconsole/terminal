@@ -82,33 +82,33 @@ namespace Spectre.Terminal.Ansi
             {
                 if (IsSequence(tokens, AnsiSequenceTokenType.Integer, AnsiSequenceTokenType.Delimiter, AnsiSequenceTokenType.Integer))
                 {
-                    // X;YH
+                    // [ROW];[COLUMN]H
                     return new CursorPosition(
-                        int.Parse(tokens[0].Content.Span, provider: CultureInfo.InvariantCulture),
-                        int.Parse(tokens[2].Content.Span, provider: CultureInfo.InvariantCulture));
+                        int.Parse(tokens[2].Content.Span, provider: CultureInfo.InvariantCulture),
+                        int.Parse(tokens[0].Content.Span, provider: CultureInfo.InvariantCulture));
                 }
             }
             else if (tokens.Length == 2)
             {
                 if (IsSequence(tokens, AnsiSequenceTokenType.Integer, AnsiSequenceTokenType.Delimiter))
                 {
-                    // X;H
-                    return new CursorPosition(int.Parse(tokens[0].Content.Span, provider: CultureInfo.InvariantCulture), 1);
+                    // [ROW];H
+                    return new CursorPosition(1, int.Parse(tokens[0].Content.Span, provider: CultureInfo.InvariantCulture));
                 }
                 else if (IsSequence(tokens, AnsiSequenceTokenType.Integer, AnsiSequenceTokenType.Delimiter))
                 {
-                    // ;YH
-                    return new CursorPosition(1, int.Parse(tokens[0].Content.Span, provider: CultureInfo.InvariantCulture));
+                    // ;[COLUMN]H
+                    return new CursorPosition(int.Parse(tokens[0].Content.Span, provider: CultureInfo.InvariantCulture), 1);
                 }
             }
             else if (tokens.Length == 1)
             {
                 if (IsSequence(tokens, AnsiSequenceTokenType.Integer))
                 {
-                    // XH
+                    // [ROW]H
                     return new CursorPosition(
-                        int.Parse(tokens[0].Content.Span, provider: CultureInfo.InvariantCulture),
-                        1);
+                        1,
+                        int.Parse(tokens[0].Content.Span, provider: CultureInfo.InvariantCulture));
                 }
             }
 
