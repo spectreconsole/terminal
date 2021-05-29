@@ -23,7 +23,13 @@ namespace Examples
             terminal.WriteLine();
             terminal.ReadRaw();
 
-            terminal.Write("\u001b[8;8HLOL!\u001b[0J");
+            terminal.Write("\u001b[8;6H[Delete after]\u001b[0K");
+            terminal.ReadRaw();
+
+            terminal.Write("\u001b[15;5H\u001b[1K[Delete before]");
+            terminal.ReadRaw();
+
+            terminal.Write("\u001b[15;4H\u001b[2K[Delete line]");
             terminal.ReadRaw();
 
             terminal.Output.WriteLine("\u001b[2JGoodbye!");

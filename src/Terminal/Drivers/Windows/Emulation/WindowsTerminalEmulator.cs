@@ -82,8 +82,8 @@ namespace Spectre.Terminal
             {
                 // Delete everything after the cursor
                 var skip = ((info.dwCursorPosition.Y - 1) * info.dwSize.X) + info.dwCursorPosition.X;
-                var take = (info.dwSize.X * info.dwSize.Y) - skip;
-                PInvoke.FillConsoleOutputCharacter(state.Handle, ' ', (uint)take, new COORD()
+                var length = (info.dwSize.X * info.dwSize.Y) - skip;
+                PInvoke.FillConsoleOutputCharacter(state.Handle, ' ', (uint)length, new COORD()
                 {
                     X = info.dwCursorPosition.X,
                     Y = info.dwCursorPosition.Y,
@@ -92,12 +92,8 @@ namespace Spectre.Terminal
             else if (op.Mode == 1)
             {
                 // Delete everything before the cursor
-                var skip = (info.dwCursorPosition.Y * info.dwSize.X) + info.dwCursorPosition.X;
-                PInvoke.FillConsoleOutputCharacter(state.Handle, ' ', (uint)skip, new COORD()
-                {
-                    X = 0,
-                    Y = 0,
-                }, out _);
+                var length = (info.dwCursorPosition.Y * info.dwSize.X) + info.dwCursorPosition.X;
+                PInvoke.FillConsoleOutputCharacter(state.Handle, ' ', (uint)length, new COORD(), out _);
             }
             else if (op.Mode == 2)
             {
@@ -109,6 +105,30 @@ namespace Spectre.Terminal
 
         void IAnsiSequenceVisitor<WindowsTerminalState>.EraseInLine(EraseInLine op, WindowsTerminalState state)
         {
+            if (!PInvoke.GetConsoleScreenBufferInfo(state.Handle, out var info))
+            {
+                return;
+            }
+
+            if (op.Mode == 0)
+            {
+                // Delete line after the cursor
+                var length = info.dwSize.X - info.dwCursorPosition.X;
+                PInvoke.FillConsoleOutputCharacter(state.Handle, ' ', (uint)length, info.dwCursorPosition, out _);
+            }
+            if (op.Mode == 1)
+            {
+                // Delete line before the cursor
+                var length = info.dwCursorPosition.X;
+                var pos = new COORD { X = 0, Y = info.dwCursorPosition.Y };
+                PInvoke.FillConsoleOutputCharacter(state.Handle, ' ', (uint)length, pos, out _);
+            }
+            if (op.Mode == 2)
+            {
+                // Delete whole line
+                var pos = new COORD { X = 0, Y = info.dwCursorPosition.Y };
+                PInvoke.FillConsoleOutputCharacter(state.Handle, ' ', (uint)info.dwSize.X, pos, out _);
+            }
         }
 
         void IAnsiSequenceVisitor<WindowsTerminalState>.PrintText(PrintText op, WindowsTerminalState state)

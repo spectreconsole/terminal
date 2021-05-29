@@ -21,8 +21,9 @@ A terminal abstraction with platform specific drivers.
   - [ ] SIGINT
   - [ ] SIGQUIT
 - [ ] Window
-  - [ ] Width
-  - [ ] Height
+  - [ ] Get width
+  - [ ] Get height
+  - [ ] Auto refresh size
 
 ## ANSI emulation (Windows)
 
@@ -33,9 +34,9 @@ A terminal abstraction with platform specific drivers.
 - [x] CNL (Cursor next line)
 - [x] CPL (Cursor previous line)
 - [x] CHA (Cursor horizontal absolute)
-- [ ] CUP (Cursor position)
-- [ ] ED (Erase in display)
-- [ ] EL (Erase in line)
+- [X] CUP (Cursor position)
+- [X] ED (Erase in display)
+- [X] EL (Erase in line)
 - [ ] SGR (Selection graphic rendition)
 - [x] SCP (Save current cursor position)
 - [x] RCP (Restore saved cursor position)

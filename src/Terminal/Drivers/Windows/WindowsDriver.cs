@@ -48,6 +48,7 @@ namespace Spectre.Terminal
                 && !(Error.GetMode(out mode) && (mode & CONSOLE_MODE.ENABLE_VIRTUAL_TERMINAL_PROCESSING) != 0)))
             {
                 // Wrap STDOUT and STDERR in an emulator
+                Name = "Windows (emulated)";
                 Output = new WindowsTerminalEmulatorAdapter(Output);
                 Error = new WindowsTerminalEmulatorAdapter(Error);
             }
