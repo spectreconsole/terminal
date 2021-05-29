@@ -45,7 +45,14 @@ namespace Spectre.Terminal.Drivers
 
         public void Write(ReadOnlySpan<byte> buffer)
         {
-            _emulator.Write(_state, buffer);
+            if (_writer.IsRedirected)
+            {
+                _writer.Write(buffer);
+            }
+            else
+            {
+                _emulator.Write(_state, buffer);
+            }
         }
     }
 }
