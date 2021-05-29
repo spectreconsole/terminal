@@ -25,7 +25,7 @@ namespace Spectre.Terminal.Drivers
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            _writer.Dispose();
         }
 
         public bool GetMode([NotNullWhen(true)] out CONSOLE_MODE? mode)
