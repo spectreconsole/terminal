@@ -1,7 +1,7 @@
 using System;
 using Microsoft.Windows.Sdk;
 
-namespace Spectre.Terminal.Drivers
+namespace Spectre.Terminal.Windows
 {
     public sealed class WindowsDriver : ITerminalDriver, IDisposable
     {

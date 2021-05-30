@@ -1,4 +1,4 @@
-namespace Spectre.Terminal.Drivers
+namespace Spectre.Terminal.Windows
 {
     internal static class WindowsConstants
     {
