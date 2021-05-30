@@ -1,6 +1,6 @@
-namespace Spectre.Terminals.Ansi
+namespace Spectre.Terminals.Windows.Emulation
 {
-    public sealed class CursorPosition : AnsiInstruction
+    internal sealed class CursorPosition : AnsiInstruction
     {
         public int Column { get; }
         public int Row { get; }

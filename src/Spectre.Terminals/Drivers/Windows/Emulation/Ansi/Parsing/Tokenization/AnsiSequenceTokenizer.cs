@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Spectre.Terminals.Ansi
+namespace Spectre.Terminals.Windows.Emulation
 {
     internal static class AnsiSequenceTokenizer
     {

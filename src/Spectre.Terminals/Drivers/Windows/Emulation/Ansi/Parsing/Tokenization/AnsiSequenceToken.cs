@@ -1,6 +1,6 @@
 using System;
 
-namespace Spectre.Terminals.Ansi
+namespace Spectre.Terminals.Windows.Emulation
 {
     internal sealed class AnsiSequenceToken
     {

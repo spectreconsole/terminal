@@ -1,17 +1,17 @@
-namespace Spectre.Terminals.Ansi
+namespace Spectre.Terminals.Windows.Emulation
 {
-    public sealed class CursorDown : AnsiInstruction
+    internal sealed class CursorUp : AnsiInstruction
     {
         public int Count { get; }
 
-        public CursorDown(int count)
+        public CursorUp(int count)
         {
             Count = count;
         }
 
         public override void Accept<TState>(IAnsiSequenceVisitor<TState> visitor, TState context)
         {
-            visitor.CursorDown(this, context);
+            visitor.CursorUp(this, context);
         }
     }
 }

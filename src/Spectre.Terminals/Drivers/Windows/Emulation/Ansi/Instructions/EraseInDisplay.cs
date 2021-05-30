@@ -1,6 +1,6 @@
-namespace Spectre.Terminals.Ansi
+namespace Spectre.Terminals.Windows.Emulation
 {
-    public sealed class EraseInDisplay : AnsiInstruction
+    internal sealed class EraseInDisplay : AnsiInstruction
     {
         public int Mode { get; }
 

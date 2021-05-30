@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Windows.Sdk;
+using Spectre.Terminals.Windows.Emulation;
 
 namespace Spectre.Terminals.Windows
 {

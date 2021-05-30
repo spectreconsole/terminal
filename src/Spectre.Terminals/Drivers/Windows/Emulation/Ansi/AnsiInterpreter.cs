@@ -1,8 +1,8 @@
 using System;
 
-namespace Spectre.Terminals.Ansi
+namespace Spectre.Terminals.Windows.Emulation
 {
-    public static class AnsiInterpreter
+    internal static class AnsiInterpreter
     {
         public static void Interpret<TContext>(IAnsiSequenceVisitor<TContext> visitor, TContext context, string text)
         {

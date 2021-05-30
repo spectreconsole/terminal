@@ -1,6 +1,6 @@
-namespace Spectre.Terminals.Ansi
+namespace Spectre.Terminals.Windows.Emulation
 {
-    public abstract class AnsiInstruction
+    internal abstract class AnsiInstruction
     {
         public abstract void Accept<TState>(IAnsiSequenceVisitor<TState> visitor, TState state);
     }

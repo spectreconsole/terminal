@@ -1,8 +1,7 @@
 using System;
 using Microsoft.Windows.Sdk;
-using Spectre.Terminals.Ansi;
 
-namespace Spectre.Terminals.Windows
+namespace Spectre.Terminals.Windows.Emulation
 {
     internal sealed class WindowsTerminalEmulator : IAnsiSequenceVisitor<WindowsTerminalState>
     {

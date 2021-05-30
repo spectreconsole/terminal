@@ -1,6 +1,6 @@
-namespace Spectre.Terminals.Ansi
+namespace Spectre.Terminals.Windows.Emulation
 {
-    public sealed class RestoreCursor : AnsiInstruction
+    internal sealed class RestoreCursor : AnsiInstruction
     {
         public override void Accept<TState>(IAnsiSequenceVisitor<TState> visitor, TState context)
         {

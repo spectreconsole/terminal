@@ -1,8 +1,8 @@
 using System;
 
-namespace Spectre.Terminals.Ansi
+namespace Spectre.Terminals.Windows.Emulation
 {
-    public sealed class PrintText : AnsiInstruction
+    internal sealed class PrintText : AnsiInstruction
     {
         public ReadOnlyMemory<char> Text { get; }
 

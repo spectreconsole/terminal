@@ -1,6 +1,6 @@
-namespace Spectre.Terminals.Ansi
+namespace Spectre.Terminals.Windows.Emulation
 {
-    public sealed class CursorBack : AnsiInstruction
+    internal sealed class CursorBack : AnsiInstruction
     {
         public int Count { get; }
 

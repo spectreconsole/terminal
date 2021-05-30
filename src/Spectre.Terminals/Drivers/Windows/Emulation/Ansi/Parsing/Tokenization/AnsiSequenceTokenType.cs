@@ -1,4 +1,4 @@
-namespace Spectre.Terminals.Ansi
+namespace Spectre.Terminals.Windows.Emulation
 {
     internal enum AnsiSequenceTokenType
     {

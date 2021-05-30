@@ -1,8 +1,8 @@
-using Spectre.Terminals.Ansi;
+using Spectre.Terminals.Windows.Emulation;
 
 namespace Spectre.Terminals.Tests
 {
-    public abstract class AnsiSequenceVisitor<TContext> : IAnsiSequenceVisitor<TContext>
+    internal abstract class AnsiSequenceVisitor<TContext> : IAnsiSequenceVisitor<TContext>
     {
         void IAnsiSequenceVisitor<TContext>.CursorBack(CursorBack instruction, TContext state) => CursorBack(instruction, state);
         void IAnsiSequenceVisitor<TContext>.CursorDown(CursorDown instruction, TContext state) => CursorDown(instruction, state);
