@@ -14,9 +14,11 @@ namespace Spectre.Terminal.Ansi
         void IAnsiSequenceVisitor<TContext>.EraseInLine(EraseInLine instruction, TContext state) => EraseInLine(instruction, state);
         void IAnsiSequenceVisitor<TContext>.PrintText(PrintText instruction, TContext state) => PrintText(instruction, state);
         void IAnsiSequenceVisitor<TContext>.RestoreCursor(RestoreCursor instruction, TContext state) => RestoreCursor(instruction, state);
-        void IAnsiSequenceVisitor<TContext>.SaveCursor(SaveCursor instruction, TContext state) => SaveCursor(instruction, state);
+        void IAnsiSequenceVisitor<TContext>.StoreCursor(StoreCursor instruction, TContext state) => StoreCursor(instruction, state);
         void IAnsiSequenceVisitor<TContext>.HideCursor(HideCursor instruction, TContext state) => HideCursor(instruction, state);
         void IAnsiSequenceVisitor<TContext>.ShowCursor(ShowCursor instruction, TContext state) => ShowCursor(instruction, state);
+        void IAnsiSequenceVisitor<TContext>.EnableAlternativeBuffer(EnableAlternativeBuffer instruction, TContext state) => EnableAlternativeBuffer(instruction, state);
+        void IAnsiSequenceVisitor<TContext>.DisableAlternativeBuffer(DisableAlternativeBuffer instruction, TContext state) => DisableAlternativeBuffer(instruction, state);
 
         protected virtual void CursorBack(CursorBack instruction, TContext state)
         {
@@ -66,7 +68,7 @@ namespace Spectre.Terminal.Ansi
         {
         }
 
-        protected virtual void SaveCursor(SaveCursor instruction, TContext state)
+        protected virtual void StoreCursor(StoreCursor instruction, TContext state)
         {
         }
 
@@ -75,6 +77,14 @@ namespace Spectre.Terminal.Ansi
         }
 
         protected virtual void ShowCursor(ShowCursor instruction, TContext state)
+        {
+        }
+
+        protected virtual void EnableAlternativeBuffer(EnableAlternativeBuffer instruction, TContext state)
+        {
+        }
+
+        protected virtual void DisableAlternativeBuffer(DisableAlternativeBuffer instruction, TContext state)
         {
         }
     }

@@ -10,6 +10,8 @@ namespace Spectre.Terminal.Windows
     {
         SafeHandle Handle { get; }
 
+        void Write(SafeHandle handle, ReadOnlySpan<byte> buffer);
+
         bool GetMode([NotNullWhen(true)] out CONSOLE_MODE? mode);
         bool AddMode(CONSOLE_MODE mode);
         bool RemoveMode(CONSOLE_MODE mode);
@@ -27,6 +29,11 @@ namespace Spectre.Terminal.Windows
 
         public unsafe void Write(ReadOnlySpan<byte> buffer)
         {
+            Write(Handle, buffer);
+        }
+
+        public unsafe void Write(SafeHandle handle, ReadOnlySpan<byte> buffer)
+        {
             if (buffer.IsEmpty)
             {
                 return;
@@ -37,7 +44,7 @@ namespace Spectre.Terminal.Windows
 
             fixed (byte* ptrData = buffer)
             {
-                if (PInvoke.WriteFile(Handle, ptrData, (uint)buffer.Length, ptrWritten, null))
+                if (PInvoke.WriteFile(handle, ptrData, (uint)buffer.Length, ptrWritten, null))
                 {
                     return;
                 }

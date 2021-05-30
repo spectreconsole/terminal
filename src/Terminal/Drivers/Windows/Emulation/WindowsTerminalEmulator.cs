@@ -1,6 +1,7 @@
 using System;
 using Spectre.Terminal.Ansi;
 using Microsoft.Windows.Sdk;
+using System.Runtime.InteropServices;
 
 namespace Spectre.Terminal.Windows
 {
@@ -135,7 +136,7 @@ namespace Spectre.Terminal.Windows
         {
             // TODO: Not very efficient
             var bytes = state.Encoding.GetBytes(op.Text.ToArray());
-            state.Writer.Write(new ReadOnlySpan<byte>(bytes));
+            state.Writer.Write(state.Handle, new ReadOnlySpan<byte>(bytes));
         }
 
         void IAnsiSequenceVisitor<WindowsTerminalState>.RestoreCursor(RestoreCursor op, WindowsTerminalState state)
@@ -146,7 +147,7 @@ namespace Spectre.Terminal.Windows
             }
         }
 
-        void IAnsiSequenceVisitor<WindowsTerminalState>.SaveCursor(SaveCursor op, WindowsTerminalState state)
+        void IAnsiSequenceVisitor<WindowsTerminalState>.StoreCursor(StoreCursor op, WindowsTerminalState state)
         {
             if (PInvoke.GetConsoleScreenBufferInfo(state.Handle, out var info))
             {
@@ -155,6 +156,72 @@ namespace Spectre.Terminal.Windows
             else
             {
                 state.StoredCursorPosition = null;
+            }
+        }
+
+        void IAnsiSequenceVisitor<WindowsTerminalState>.HideCursor(HideCursor instruction, WindowsTerminalState state)
+        {
+            if (PInvoke.GetConsoleCursorInfo(state.Handle, out var info))
+            {
+                PInvoke.SetConsoleCursorInfo(state.Handle, new CONSOLE_CURSOR_INFO
+                {
+                    bVisible = false,
+                    dwSize = info.dwSize,
+                });
+            }
+        }
+
+        void IAnsiSequenceVisitor<WindowsTerminalState>.ShowCursor(ShowCursor instruction, WindowsTerminalState state)
+        {
+            if (PInvoke.GetConsoleCursorInfo(state.Handle, out var info))
+            {
+                PInvoke.SetConsoleCursorInfo(state.Handle, new CONSOLE_CURSOR_INFO
+                {
+                    bVisible = true,
+                    dwSize = info.dwSize,
+                });
+            }
+        }
+
+        unsafe void IAnsiSequenceVisitor<WindowsTerminalState>.EnableAlternativeBuffer(
+            EnableAlternativeBuffer instruction, WindowsTerminalState state)
+        {
+            if (state.AlternativeBuffer != null)
+            {
+                return;
+            }
+
+            // Try creating the screen buffer
+            state.AlternativeBuffer = PInvoke.CreateConsoleScreenBuffer(
+                WindowsConstants.GENERIC_WRITE, WindowsConstants.FILE_SHARE_WRITE,
+                (SECURITY_ATTRIBUTES?)null, WindowsConstants.CONSOLE_TEXTMODE_BUFFER, null);
+
+            // Set the screenbuffer if successful
+            if (state.AlternativeBuffer != null)
+            {
+                PInvoke.SetConsoleActiveScreenBuffer(state.AlternativeBuffer);
+                SetCursorPosition(state, new COORD
+                {
+                    X = 0,
+                    Y = 0,
+                });
+            }
+        }
+
+        void IAnsiSequenceVisitor<WindowsTerminalState>.DisableAlternativeBuffer(
+            DisableAlternativeBuffer instruction, WindowsTerminalState state)
+        {
+            if (state.AlternativeBuffer != null)
+            {
+                if (PInvoke.SetConsoleActiveScreenBuffer(state.MainBuffer))
+                {
+                    var handle = state.AlternativeBuffer.DangerousGetHandle();
+                    if (handle != IntPtr.Zero)
+                    {
+                        PInvoke.CloseHandle(new HANDLE(handle));
+                        state.AlternativeBuffer = null;
+                    }
+                }
             }
         }
 
@@ -168,36 +235,22 @@ namespace Spectre.Terminal.Windows
             }
         }
 
+        private static COORD? GetCursorPosition(WindowsTerminalState state)
+        {
+            if (PInvoke.GetConsoleScreenBufferInfo(state.Handle, out var info))
+            {
+                return info.dwCursorPosition;
+            }
+
+            return null;
+        }
+
         private static void SetCursorPosition(WindowsTerminalState state, COORD coordinates)
         {
             coordinates.X = (short)Math.Max(coordinates.X - 1, 0);
             coordinates.Y = (short)Math.Max(coordinates.Y - 1, 0);
 
             PInvoke.SetConsoleCursorPosition(state.Handle, coordinates);
-        }
-
-        public void HideCursor(HideCursor instruction, WindowsTerminalState state)
-        {
-            if (PInvoke.GetConsoleCursorInfo(state.Handle, out var info))
-            {
-                PInvoke.SetConsoleCursorInfo(state.Handle, new CONSOLE_CURSOR_INFO
-                {
-                    bVisible = false,
-                    dwSize = info.dwSize,
-                });
-            }
-        }
-
-        public void ShowCursor(ShowCursor instruction, WindowsTerminalState state)
-        {
-            if (PInvoke.GetConsoleCursorInfo(state.Handle, out var info))
-            {
-                PInvoke.SetConsoleCursorInfo(state.Handle, new CONSOLE_CURSOR_INFO
-                {
-                    bVisible = true,
-                    dwSize = info.dwSize,
-                });
-            }
         }
     }
 }

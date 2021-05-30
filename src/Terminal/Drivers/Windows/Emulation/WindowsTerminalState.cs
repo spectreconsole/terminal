@@ -7,15 +7,18 @@ namespace Spectre.Terminal.Windows
 {
     internal class WindowsTerminalState
     {
-        public SafeHandle Handle { get; }
-        public ITerminalWriter Writer { get; }
+        public IWindowsTerminalWriter Writer { get; }
+        public SafeHandle Handle => AlternativeBuffer ?? MainBuffer;
         public Encoding Encoding => Writer.Encoding;
 
         public COORD? StoredCursorPosition { get; set; }
 
-        public WindowsTerminalState(SafeHandle handle, ITerminalWriter writer)
+        public SafeHandle MainBuffer { get; set; }
+        public SafeHandle? AlternativeBuffer { get; set; }
+
+        public WindowsTerminalState(IWindowsTerminalWriter writer)
         {
-            Handle = handle ?? throw new ArgumentNullException(nameof(handle));
+            MainBuffer = writer.Handle;
             Writer = writer ?? throw new ArgumentNullException(nameof(writer));
         }
     }

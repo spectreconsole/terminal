@@ -15,7 +15,7 @@ namespace Spectre.Terminal.Ansi
                 {
                     yield return new PrintText(token.Text);
                 }
-                else if(token.IsSequence)
+                else if (token.IsSequence)
                 {
                     var instruction = ParseInstruction(token.Sequence.ToArray());
                     if (instruction != null)
@@ -71,8 +71,32 @@ namespace Spectre.Terminal.Ansi
                 parameters = new Span<AnsiSequenceToken>(tokens)[2..^1];
                 return terminal.Value switch
                 {
-                    'l' => ParseIntegerInstruction(parameters, value => value == 25, () => new HideCursor()),
-                    'h' => ParseIntegerInstruction(parameters, value => value == 25, () => new ShowCursor()),
+                    'h' => ParseIntegerInstruction(parameters, value =>
+                    {
+                        if (value == 25)
+                        {
+                            return new ShowCursor();
+                        }
+                        else if (value == 1049)
+                        {
+                            return new EnableAlternativeBuffer();
+                        }
+
+                        return null;
+                    }),
+                    'l' => ParseIntegerInstruction(parameters, value =>
+                    {
+                        if (value == 25)
+                        {
+                            return new HideCursor();
+                        }
+                        else if(value == 1049)
+                        {
+                            return new DisableAlternativeBuffer();
+                        }
+
+                        return null;
+                    }),
                     _ => null, // Unknown query instruction
                 };
             }
@@ -89,7 +113,7 @@ namespace Spectre.Terminal.Ansi
                 'H' => ParseCursorPosition(parameters),
                 'J' => ParseIntegerInstruction(parameters, count => new EraseInDisplay(count), defaultValue: 0),
                 'K' => ParseIntegerInstruction(parameters, count => new EraseInLine(count), defaultValue: 0),
-                's' => new SaveCursor(),
+                's' => new StoreCursor(),
                 'u' => new RestoreCursor(),
                 _ => null, // Unknown instruction
             };
@@ -100,7 +124,7 @@ namespace Spectre.Terminal.Ansi
             return tokens.Length > 1 && tokens[0].Type == AnsiSequenceTokenType.Query;
         }
 
-        private static AnsiInstruction? ParseIntegerInstruction(ReadOnlySpan<AnsiSequenceToken> tokens, Func<int, AnsiInstruction> func, int defaultValue = 1)
+        private static AnsiInstruction? ParseIntegerInstruction(ReadOnlySpan<AnsiSequenceToken> tokens, Func<int, AnsiInstruction?> func, int defaultValue = 1)
         {
             if (tokens.Length != 1)
             {

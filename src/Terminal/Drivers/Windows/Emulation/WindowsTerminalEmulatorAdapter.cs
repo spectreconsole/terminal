@@ -20,7 +20,7 @@ namespace Spectre.Terminal.Windows
         {
             _writer = writer ?? throw new ArgumentNullException(nameof(writer));
             _emulator = new WindowsTerminalEmulator();
-            _state = new WindowsTerminalState(writer.Handle, writer);
+            _state = new WindowsTerminalState(writer);
         }
 
         public void Dispose()
@@ -47,12 +47,17 @@ namespace Spectre.Terminal.Windows
         {
             if (_writer.IsRedirected)
             {
-                _writer.Write(buffer);
+                _writer.Write(Handle, buffer);
             }
             else
             {
                 _emulator.Write(_state, buffer);
             }
+        }
+
+        public void Write(SafeHandle handle, ReadOnlySpan<byte> buffer)
+        {
+            throw new NotSupportedException();
         }
     }
 }

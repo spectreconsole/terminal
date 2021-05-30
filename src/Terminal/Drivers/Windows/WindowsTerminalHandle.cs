@@ -7,7 +7,7 @@ namespace Spectre.Terminal.Windows
 {
     internal abstract class WindowsTerminalHandle : IDisposable
     {
-        public SafeHandle Handle { get; }
+        public SafeHandle Handle { get; set; }
         public bool IsRedirected { get; }
 
         public WindowsTerminalHandle(STD_HANDLE_TYPE handle)

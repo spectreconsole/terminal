@@ -13,3 +13,6 @@ SetConsoleCursorPosition
 FillConsoleOutputCharacter
 GetConsoleCursorInfo
 SetConsoleCursorInfo
+CreateConsoleScreenBuffer
+SetConsoleActiveScreenBuffer
+CloseHandle

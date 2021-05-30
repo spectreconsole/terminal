@@ -40,6 +40,10 @@ A terminal abstraction with platform specific drivers.
 - [ ] SGR (Selection graphic rendition)
 - [x] SCP (Save current cursor position)
 - [x] RCP (Restore saved cursor position)
+- [x] DECTCEM 25 (Hide cursor)
+- [x] DECTCEM 25 (Show cursor)
+- [x] DECSET 1049 (Enable alternative buffer)
+- [x] DECSET 1049 (Disable alternative buffer)
 
 ## Acknowledgement
 
