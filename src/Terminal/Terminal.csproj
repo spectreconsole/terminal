@@ -5,7 +5,7 @@
     <LangVersion>9</LangVersion>
     <Nullable>enable</Nullable>
     <AssemblyName>Terminal</AssemblyName>
-    <RootNamespace>Spectre.Terminal</RootNamespace>
+    <RootNamespace>Spectre.Terminals</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

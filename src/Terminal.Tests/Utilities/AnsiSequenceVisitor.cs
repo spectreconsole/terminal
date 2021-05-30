@@ -1,4 +1,6 @@
-namespace Spectre.Terminal.Ansi
+using Spectre.Terminals.Ansi;
+
+namespace Spectre.Terminals.Tests
 {
     public abstract class AnsiSequenceVisitor<TContext> : IAnsiSequenceVisitor<TContext>
     {

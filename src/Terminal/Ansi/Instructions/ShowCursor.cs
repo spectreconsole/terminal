@@ -1,4 +1,4 @@
-﻿namespace Spectre.Terminal.Ansi
+namespace Spectre.Terminals.Ansi
 {
     public sealed class ShowCursor : AnsiInstruction
     {

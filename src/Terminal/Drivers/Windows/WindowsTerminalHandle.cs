@@ -3,7 +3,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
-namespace Spectre.Terminal.Windows
+namespace Spectre.Terminals.Windows
 {
     internal abstract class WindowsTerminalHandle : IDisposable
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Spectre.Terminal
+namespace Spectre.Terminals
 {
     public static partial class ITerminalExtensions
     {

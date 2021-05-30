@@ -1,6 +1,6 @@
 using System;
 
-namespace Spectre.Terminal.Ansi
+namespace Spectre.Terminals.Ansi
 {
     internal sealed class AnsiSequenceToken
     {

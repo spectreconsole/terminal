@@ -1,8 +1,8 @@
 using System;
 using System.Runtime.InteropServices;
-using Spectre.Terminal.Windows;
+using Spectre.Terminals.Windows;
 
-namespace Spectre.Terminal
+namespace Spectre.Terminals
 {
     internal static class TerminalFactory
     {

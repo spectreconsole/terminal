@@ -1,4 +1,4 @@
-namespace Spectre.Terminal.Windows
+namespace Spectre.Terminals.Windows
 {
     internal static class WindowsConstants
     {

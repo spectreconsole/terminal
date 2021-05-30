@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace Spectre.Terminal
+namespace Spectre.Terminals
 {
     internal static class EncodingHelper
     {

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Spectre.Terminal
+namespace Spectre.Terminals
 {
     internal static class EnumerableExtensions
     {

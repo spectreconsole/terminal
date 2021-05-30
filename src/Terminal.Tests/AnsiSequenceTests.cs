@@ -1,9 +1,9 @@
 using System.Text;
 using Shouldly;
-using Spectre.Terminal.Ansi;
+using Spectre.Terminals.Ansi;
 using Xunit;
 
-namespace Spectre.Terminal.Tests
+namespace Spectre.Terminals.Tests
 {
     public sealed class AnsiSequenceTests
     {

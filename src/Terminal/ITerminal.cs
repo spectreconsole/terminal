@@ -1,6 +1,6 @@
 using System;
 
-namespace Spectre.Terminal
+namespace Spectre.Terminals
 {
     public interface ITerminal : IDisposable
     {

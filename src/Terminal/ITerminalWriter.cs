@@ -1,7 +1,7 @@
 using System;
 using System.Text;
 
-namespace Spectre.Terminal
+namespace Spectre.Terminals
 {
     public interface ITerminalWriter
     {

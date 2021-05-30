@@ -3,7 +3,7 @@ using System.Text;
 using Microsoft.Windows.Sdk;
 using System.Runtime.InteropServices;
 
-namespace Spectre.Terminal.Windows
+namespace Spectre.Terminals.Windows
 {
     internal sealed class WindowsTerminalReader : WindowsTerminalHandle, ITerminalReader
     {

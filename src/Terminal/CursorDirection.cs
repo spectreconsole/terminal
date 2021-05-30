@@ -1,4 +1,4 @@
-namespace Spectre.Terminal
+namespace Spectre.Terminals
 {
     public enum CursorDirection
     {

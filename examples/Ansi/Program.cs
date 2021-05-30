@@ -1,4 +1,4 @@
-using Spectre.Terminal;
+using Spectre.Terminals;
 
 namespace Examples
 {
@@ -6,7 +6,7 @@ namespace Examples
     {
         public static void Main(string[] args)
         {
-            ITerminal terminal = Terminal.Shared;
+            var terminal = Terminal.Shared;
 
             // Information
             terminal.WriteLine("\u001b[2J\u001b[1;1HSpectre.Terminal");

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
-namespace Spectre.Terminal.Ansi
+namespace Spectre.Terminals.Ansi
 {
     internal sealed class AnsiParser
     {

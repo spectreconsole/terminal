@@ -1,7 +1,7 @@
 using System;
 using System.Buffers;
 
-namespace Spectre.Terminal
+namespace Spectre.Terminals
 {
     public static class ITerminalWriterExtensions
     {
