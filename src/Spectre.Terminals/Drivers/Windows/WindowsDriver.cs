@@ -1,11 +1,14 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Windows.Sdk;
 
 namespace Spectre.Terminals.Windows
 {
-    public sealed class WindowsDriver : ITerminalDriver, IDisposable
+    internal sealed class WindowsDriver : ITerminalDriver, IDisposable
     {
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore")]
         private const CONSOLE_MODE IN_MODE = CONSOLE_MODE.ENABLE_PROCESSED_INPUT | CONSOLE_MODE.ENABLE_LINE_INPUT | CONSOLE_MODE.ENABLE_ECHO_INPUT;
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore")]
         private const CONSOLE_MODE OUT_MODE = CONSOLE_MODE.DISABLE_NEWLINE_AUTO_RETURN;
 
         private readonly WindowsTerminalReader _input;

@@ -90,7 +90,7 @@ namespace Spectre.Terminals.Ansi
                         {
                             return new HideCursor();
                         }
-                        else if(value == 1049)
+                        else if (value == 1049)
                         {
                             return new DisableAlternativeBuffer();
                         }

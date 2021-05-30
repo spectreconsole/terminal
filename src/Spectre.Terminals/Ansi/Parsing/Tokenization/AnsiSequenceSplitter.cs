@@ -5,7 +5,7 @@ namespace Spectre.Terminals.Ansi
 {
     internal static class AnsiSequenceSplitter
     {
-        public static List<(ReadOnlyMemory<char>, bool)> Split(ReadOnlyMemory<char> buffer)
+        public static List<(ReadOnlyMemory<char> Text, bool IsSequence)> Split(ReadOnlyMemory<char> buffer)
         {
             var index = 0;
             var end = 0;

@@ -1,7 +1,6 @@
 using System;
-using Spectre.Terminals.Ansi;
 using Microsoft.Windows.Sdk;
-using System.Runtime.InteropServices;
+using Spectre.Terminals.Ansi;
 
 namespace Spectre.Terminals.Windows
 {
@@ -94,13 +93,13 @@ namespace Spectre.Terminals.Windows
             {
                 // Delete everything before the cursor
                 var length = (info.dwCursorPosition.Y * info.dwSize.X) + info.dwCursorPosition.X;
-                PInvoke.FillConsoleOutputCharacter(state.Handle, ' ', (uint)length, new COORD(), out _);
+                PInvoke.FillConsoleOutputCharacter(state.Handle, ' ', (uint)length, default(COORD), out _);
             }
             else if (op.Mode == 2 || op.Mode == 3)
             {
                 // Delete everything
                 var terminalSize = info.dwSize.X * info.dwSize.Y;
-                PInvoke.FillConsoleOutputCharacter(state.Handle, ' ', (uint)terminalSize, new COORD(), out _);
+                PInvoke.FillConsoleOutputCharacter(state.Handle, ' ', (uint)terminalSize, default(COORD), out _);
             }
         }
 
@@ -117,14 +116,14 @@ namespace Spectre.Terminals.Windows
                 var length = info.dwSize.X - info.dwCursorPosition.X;
                 PInvoke.FillConsoleOutputCharacter(state.Handle, ' ', (uint)length, info.dwCursorPosition, out _);
             }
-            if (op.Mode == 1)
+            else if (op.Mode == 1)
             {
                 // Delete line before the cursor
                 var length = info.dwCursorPosition.X;
                 var pos = new COORD { X = 0, Y = info.dwCursorPosition.Y };
                 PInvoke.FillConsoleOutputCharacter(state.Handle, ' ', (uint)length, pos, out _);
             }
-            if (op.Mode == 2)
+            else if (op.Mode == 2)
             {
                 // Delete whole line
                 var pos = new COORD { X = 0, Y = info.dwCursorPosition.Y };

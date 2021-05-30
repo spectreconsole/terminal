@@ -50,12 +50,12 @@ namespace Spectre.Terminals.Tests
 
                 protected override void ShowCursor(ShowCursor instruction, StringBuilder state)
                 {
-                    state.Append($"[ShowCursor]");
+                    state.Append("[ShowCursor]");
                 }
 
                 protected override void HideCursor(HideCursor instruction, StringBuilder state)
                 {
-                    state.Append($"[HideCursor]");
+                    state.Append("[HideCursor]");
                 }
             }
         }

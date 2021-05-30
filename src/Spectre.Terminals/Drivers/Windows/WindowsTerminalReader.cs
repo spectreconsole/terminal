@@ -1,7 +1,7 @@
 using System;
+using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.Windows.Sdk;
-using System.Runtime.InteropServices;
 
 namespace Spectre.Terminals.Windows
 {
