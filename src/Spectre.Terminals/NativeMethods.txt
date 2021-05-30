@@ -16,3 +16,4 @@ SetConsoleCursorInfo
 CreateConsoleScreenBuffer
 SetConsoleActiveScreenBuffer
 CloseHandle
+GetLargestConsoleWindowSize

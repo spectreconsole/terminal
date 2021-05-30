@@ -16,14 +16,13 @@ A terminal abstraction with platform specific drivers.
   - [ ] Set encoding
   - [x] Redirect to custom writer
   - [x] Is handle redirected?
-- [x] Raw mode
+- [x] Raw mode (enable/disable)
 - [ ] Signals
   - [ ] SIGINT
   - [ ] SIGQUIT
-- [ ] Window
-  - [ ] Get width
-  - [ ] Get height
-  - [ ] Auto refresh size
+- [x] Window
+  - [x] Get width
+  - [x] Get height
 
 ## ANSI emulation (Windows)
 

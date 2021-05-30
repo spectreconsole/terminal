@@ -24,6 +24,9 @@ namespace Spectre.Terminals
         public bool IsRawMode { get; private set; }
 
         /// <inheritdoc/>
+        public TerminalSize? Size => _driver.Size;
+
+        /// <inheritdoc/>
         public ITerminalReader Input { get; }
 
         /// <inheritdoc/>

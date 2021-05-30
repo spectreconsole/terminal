@@ -18,6 +18,11 @@ namespace Spectre.Terminals
         bool IsRawMode { get; }
 
         /// <summary>
+        /// Gets the terminal size.
+        /// </summary>
+        TerminalSize? Size { get; }
+
+        /// <summary>
         /// Gets a <see cref="ITerminalWriter"/> for <c>STDIN</c>.
         /// </summary>
         ITerminalReader Input { get; }

@@ -17,6 +17,7 @@ namespace Spectre.Terminals.Windows
 
         public string Name { get; } = "Windows";
         public bool IsRawMode { get; private set; }
+        public TerminalSize? Size => GetTerminalSize();
 
         ITerminalReader ITerminalDriver.Input => _input;
         ITerminalWriter ITerminalDriver.Output => _output;
@@ -46,7 +47,7 @@ namespace Spectre.Terminals.Windows
                 CONSOLE_MODE.DISABLE_NEWLINE_AUTO_RETURN |
                 CONSOLE_MODE.ENABLE_VIRTUAL_TERMINAL_PROCESSING);
 
-            // ANSI not supported?
+            // ENABLE_VIRTUAL_TERMINAL_PROCESSING not supported?
             if (emulate || (!(_output.GetMode(out var mode) && (mode & CONSOLE_MODE.ENABLE_VIRTUAL_TERMINAL_PROCESSING) != 0)
                 && !(_error.GetMode(out mode) && (mode & CONSOLE_MODE.ENABLE_VIRTUAL_TERMINAL_PROCESSING) != 0)))
             {
@@ -98,6 +99,17 @@ namespace Spectre.Terminals.Windows
 
             IsRawMode = false;
             return true;
+        }
+
+        private TerminalSize? GetTerminalSize()
+        {
+            if (!PInvoke.GetConsoleScreenBufferInfo(_output.Handle, out var info) &&
+                !PInvoke.GetConsoleScreenBufferInfo(_error.Handle, out info))
+            {
+                return null;
+            }
+
+            return new TerminalSize(info.srWindow.Right, info.srWindow.Bottom);
         }
     }
 }
