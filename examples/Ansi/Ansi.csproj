@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Terminal\Terminal.csproj" />
+    <ProjectReference Include="..\..\src\Spectre.Terminals\Spectre.Terminals.csproj" />
   </ItemGroup>
 
 </Project>

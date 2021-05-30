@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.6.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Terminal", "Terminal\Terminal.csproj", "{11FF129D-7BA1-4016-A52B-6AAE6C3F7703}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spectre.Terminals", "Spectre.Terminals\Spectre.Terminals.csproj", "{11FF129D-7BA1-4016-A52B-6AAE6C3F7703}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Terminal.Tests", "Terminal.Tests\Terminal.Tests.csproj", "{B9AA6477-1C5F-44CE-87C1-219948DB8772}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spectre.Terminals.Tests", "Spectre.Terminals.Tests\Spectre.Terminals.Tests.csproj", "{B9AA6477-1C5F-44CE-87C1-219948DB8772}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{02C78B96-9010-48EC-ADB5-4F48884F8937}"
 EndProject

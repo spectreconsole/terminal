@@ -4,8 +4,6 @@
     <TargetFramework>net5.0</TargetFramework>
     <LangVersion>9</LangVersion>
     <Nullable>enable</Nullable>
-    <AssemblyName>Terminal</AssemblyName>
-    <RootNamespace>Spectre.Terminals</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

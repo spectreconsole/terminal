@@ -2,10 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-
     <IsPackable>false</IsPackable>
-
-    <RootNamespace>Spectre.Terminals.Tests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Terminal\Terminal.csproj" />
+    <ProjectReference Include="..\Spectre.Terminals\Spectre.Terminals.csproj" />
   </ItemGroup>
 
 </Project>
