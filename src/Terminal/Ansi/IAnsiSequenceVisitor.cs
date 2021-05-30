@@ -15,5 +15,7 @@ namespace Spectre.Terminal.Ansi
         void PrintText(PrintText instruction, TState state);
         void RestoreCursor(RestoreCursor instruction, TState state);
         void SaveCursor(SaveCursor instruction, TState state);
+        void HideCursor(HideCursor instruction, TState state);
+        void ShowCursor(ShowCursor instruction, TState state);
     }
 }

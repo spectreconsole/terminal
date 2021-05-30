@@ -19,33 +19,43 @@ namespace Spectre.Terminal.Tests
                 // When
                 AnsiInterpreter.Interpret(
                     printer, state,
-                    "\u001b[2KHello \u001b[2BWorld!\u001b[1G!");
+                    "\u001b[?25l\u001b[2KHello \u001b[2BWorld!\u001b[1G!\u001b[?25h");
 
                 // Then
                 state.ToString()
-                    .ShouldBe("[EL2]Hello [CUD2]World![CHA1]!");
+                    .ShouldBe("[HideCursor][EL2]Hello [CUD2]World![CHA1]![ShowCursor]");
             }
 
             private sealed class AnsiPrinter : AnsiSequenceVisitor<StringBuilder>
             {
-                protected override void CursorDown(CursorDown instruction, StringBuilder context)
+                protected override void CursorDown(CursorDown instruction, StringBuilder state)
                 {
-                    context.Append($"[CUD{instruction.Count}]");
+                    state.Append($"[CUD{instruction.Count}]");
                 }
 
-                protected override void CursorHorizontalAbsolute(CursorHorizontalAbsolute instruction, StringBuilder context)
+                protected override void CursorHorizontalAbsolute(CursorHorizontalAbsolute instruction, StringBuilder state)
                 {
-                    context.Append($"[CHA{instruction.Column}]");
+                    state.Append($"[CHA{instruction.Column}]");
                 }
 
-                protected override void EraseInLine(EraseInLine instruction, StringBuilder context)
+                protected override void EraseInLine(EraseInLine instruction, StringBuilder state)
                 {
-                    context.Append($"[EL{instruction.Mode}]");
+                    state.Append($"[EL{instruction.Mode}]");
                 }
 
-                protected override void PrintText(PrintText instruction, StringBuilder context)
+                protected override void PrintText(PrintText instruction, StringBuilder state)
                 {
-                    context.Append(instruction.Text.ToString());
+                    state.Append(instruction.Text.ToString());
+                }
+
+                protected override void ShowCursor(ShowCursor instruction, StringBuilder state)
+                {
+                    state.Append($"[ShowCursor]");
+                }
+
+                protected override void HideCursor(HideCursor instruction, StringBuilder state)
+                {
+                    state.Append($"[HideCursor]");
                 }
             }
         }

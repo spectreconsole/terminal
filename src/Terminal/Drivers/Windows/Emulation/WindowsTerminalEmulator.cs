@@ -95,7 +95,7 @@ namespace Spectre.Terminal.Windows
                 var length = (info.dwCursorPosition.Y * info.dwSize.X) + info.dwCursorPosition.X;
                 PInvoke.FillConsoleOutputCharacter(state.Handle, ' ', (uint)length, new COORD(), out _);
             }
-            else if (op.Mode == 2)
+            else if (op.Mode == 2 || op.Mode == 3)
             {
                 // Delete everything
                 var terminalSize = info.dwSize.X * info.dwSize.Y;
@@ -174,6 +174,30 @@ namespace Spectre.Terminal.Windows
             coordinates.Y = (short)Math.Max(coordinates.Y - 1, 0);
 
             PInvoke.SetConsoleCursorPosition(state.Handle, coordinates);
+        }
+
+        public void HideCursor(HideCursor instruction, WindowsTerminalState state)
+        {
+            if (PInvoke.GetConsoleCursorInfo(state.Handle, out var info))
+            {
+                PInvoke.SetConsoleCursorInfo(state.Handle, new CONSOLE_CURSOR_INFO
+                {
+                    bVisible = false,
+                    dwSize = info.dwSize,
+                });
+            }
+        }
+
+        public void ShowCursor(ShowCursor instruction, WindowsTerminalState state)
+        {
+            if (PInvoke.GetConsoleCursorInfo(state.Handle, out var info))
+            {
+                PInvoke.SetConsoleCursorInfo(state.Handle, new CONSOLE_CURSOR_INFO
+                {
+                    bVisible = true,
+                    dwSize = info.dwSize,
+                });
+            }
         }
     }
 }

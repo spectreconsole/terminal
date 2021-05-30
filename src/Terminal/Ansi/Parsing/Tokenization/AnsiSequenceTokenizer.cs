@@ -86,6 +86,16 @@ namespace Spectre.Terminal.Ansi
 
                 return true;
             }
+            else if (current == '?')
+            {
+                var start = buffer.Position;
+                buffer.Discard();
+                token = new AnsiSequenceToken(
+                    AnsiSequenceTokenType.Query,
+                    buffer.Slice(start, start + 1));
+
+                return true;
+            }
 
             token = null;
             return false;

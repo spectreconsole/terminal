@@ -2,7 +2,7 @@ using System;
 
 namespace Spectre.Terminal
 {
-    public static class ITerminalExtensions
+    public static partial class ITerminalExtensions
     {
         public static byte? ReadRaw(this ITerminal terminal)
         {
@@ -37,5 +37,7 @@ namespace Spectre.Terminal
         {
             terminal.Output.WriteLine(value);
         }
+
+
     }
 }

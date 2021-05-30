@@ -11,3 +11,5 @@ FlushConsoleInputBuffer
 GetConsoleScreenBufferInfo
 SetConsoleCursorPosition
 FillConsoleOutputCharacter
+GetConsoleCursorInfo
+SetConsoleCursorInfo

@@ -65,7 +65,18 @@ namespace Spectre.Terminal.Ansi
             // Get the parameters
             var parameters = new Span<AnsiSequenceToken>(tokens)[1..^1];
 
-            // Create the instruction
+            // Query?
+            if (IsQuery(parameters))
+            {
+                parameters = new Span<AnsiSequenceToken>(tokens)[2..^1];
+                return terminal.Value switch
+                {
+                    'l' => ParseIntegerInstruction(parameters, value => value == 25, () => new HideCursor()),
+                    'h' => ParseIntegerInstruction(parameters, value => value == 25, () => new ShowCursor()),
+                    _ => null, // Unknown query instruction
+                };
+            }
+
             return terminal.Value switch
             {
                 'A' => ParseIntegerInstruction(parameters, count => new CursorUp(count), defaultValue: 1),
@@ -84,6 +95,11 @@ namespace Spectre.Terminal.Ansi
             };
         }
 
+        private static bool IsQuery(ReadOnlySpan<AnsiSequenceToken> tokens)
+        {
+            return tokens.Length > 1 && tokens[0].Type == AnsiSequenceTokenType.Query;
+        }
+
         private static AnsiInstruction? ParseIntegerInstruction(ReadOnlySpan<AnsiSequenceToken> tokens, Func<int, AnsiInstruction> func, int defaultValue = 1)
         {
             if (tokens.Length != 1)
@@ -97,6 +113,24 @@ namespace Spectre.Terminal.Ansi
             }
 
             return func(int.Parse(tokens[0].Content.Span));
+        }
+
+        private static AnsiInstruction? ParseIntegerInstruction(
+            ReadOnlySpan<AnsiSequenceToken> tokens,
+            Func<int, bool> predicate,
+            Func<AnsiInstruction> func)
+        {
+            if (tokens[0].Type != AnsiSequenceTokenType.Integer)
+            {
+                return null;
+            }
+
+            if (predicate(int.Parse(tokens[0].Content.Span)))
+            {
+                return func();
+            }
+
+            return null;
         }
 
         private static CursorPosition? ParseCursorPosition(ReadOnlySpan<AnsiSequenceToken> tokens)
