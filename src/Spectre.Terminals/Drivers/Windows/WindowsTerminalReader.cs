@@ -8,14 +8,20 @@ namespace Spectre.Terminals.Windows
     internal sealed class WindowsTerminalReader : WindowsTerminalHandle, ITerminalReader
     {
         private readonly WindowsDriver _driver;
+        private Encoding _encoding;
 
-        public Encoding Encoding { get; }
+        public Encoding Encoding
+        {
+            get => _encoding;
+            set => SetEncoding(value);
+        }
+
         public bool IsRawMode => _driver.IsRawMode;
 
         public WindowsTerminalReader(WindowsDriver driver)
             : base(STD_HANDLE_TYPE.STD_INPUT_HANDLE)
         {
-            Encoding = EncodingHelper.GetEncodingFromCodePage((int)PInvoke.GetConsoleCP());
+            _encoding = EncodingHelper.GetEncodingFromCodePage((int)PInvoke.GetConsoleCP());
             _driver = driver;
         }
 
@@ -44,6 +50,14 @@ namespace Spectre.Terminals.Windows
             }
 
             return (int)result;
+        }
+
+        private void SetEncoding(Encoding encoding)
+        {
+            if (PInvoke.SetConsoleCP((uint)encoding.CodePage))
+            {
+                _encoding = encoding;
+            }
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Spectre.Terminals
         /// <summary>
         /// Gets the encoding.
         /// </summary>
-        Encoding Encoding { get; }
+        Encoding Encoding { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether or not the reader has been redirected.

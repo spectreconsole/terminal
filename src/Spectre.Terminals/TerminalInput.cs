@@ -9,7 +9,12 @@ namespace Spectre.Terminals
         private readonly object _lock;
         private ITerminalReader? _redirected;
 
-        public Encoding Encoding => GetEncoding();
+        public Encoding Encoding
+        {
+            get => GetEncoding();
+            set => SetEncoding(value);
+        }
+
         public bool IsRedirected => GetIsRedirected();
 
         public TerminalInput(ITerminalReader reader)
@@ -39,6 +44,19 @@ namespace Spectre.Terminals
             }
         }
 
+        private bool GetIsRedirected()
+        {
+            lock (_lock)
+            {
+                if (_redirected != null)
+                {
+                    return _redirected.IsRedirected;
+                }
+
+                return _reader.IsRedirected;
+            }
+        }
+
         private Encoding GetEncoding()
         {
             lock (_lock)
@@ -52,16 +70,23 @@ namespace Spectre.Terminals
             }
         }
 
-        private bool GetIsRedirected()
+        private void SetEncoding(Encoding encoding)
         {
+            if (encoding is null)
+            {
+                throw new ArgumentNullException(nameof(encoding));
+            }
+
             lock (_lock)
             {
                 if (_redirected != null)
                 {
-                    return _redirected.IsRedirected;
+                    _redirected.Encoding = encoding;
                 }
-
-                return _reader.IsRedirected;
+                else
+                {
+                    _reader.Encoding = encoding;
+                }
             }
         }
     }
