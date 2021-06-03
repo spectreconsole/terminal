@@ -9,8 +9,6 @@ namespace Spectre.Terminals
         private readonly object _lock;
         private ITerminalReader? _redirected;
 
-        public string Name => _reader.Name;
-
         public Encoding Encoding
         {
             get => GetEncoding();

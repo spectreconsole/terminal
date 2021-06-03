@@ -10,8 +10,6 @@ namespace Spectre.Terminals.Windows
         private readonly WindowsDriver _driver;
         private Encoding _encoding;
 
-        public string Name { get; } = "STDIN";
-
         public Encoding Encoding
         {
             get => _encoding;
@@ -48,7 +46,7 @@ namespace Spectre.Terminals.Windows
                 case WindowsConstants.ERROR_NO_DATA:
                     break;
                 default:
-                    throw new InvalidOperationException($"Could not read from {Name}");
+                    throw new InvalidOperationException("Could not read from STDIN");
             }
 
             return (int)result;

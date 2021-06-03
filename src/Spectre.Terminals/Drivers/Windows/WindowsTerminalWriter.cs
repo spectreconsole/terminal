@@ -7,9 +7,8 @@ namespace Spectre.Terminals.Windows
 {
     internal sealed class WindowsTerminalWriter : WindowsTerminalHandle, IWindowsTerminalWriter
     {
+        private readonly string _name;
         private Encoding _encoding;
-
-        public string Name { get; }
 
         public Encoding Encoding
         {
@@ -20,8 +19,8 @@ namespace Spectre.Terminals.Windows
         public WindowsTerminalWriter(STD_HANDLE_TYPE handle)
             : base(handle)
         {
+            _name = handle == STD_HANDLE_TYPE.STD_OUTPUT_HANDLE ? "STDOUT" : "STDERR";
             _encoding = EncodingHelper.GetEncodingFromCodePage((int)PInvoke.GetConsoleOutputCP());
-            Name = handle == STD_HANDLE_TYPE.STD_OUTPUT_HANDLE ? "STDOUT" : "STDERR";
         }
 
         public unsafe void Write(ReadOnlySpan<byte> buffer)
@@ -55,7 +54,7 @@ namespace Spectre.Terminals.Windows
                 case WindowsConstants.ERROR_NO_DATA:
                     break;
                 default:
-                    throw new InvalidOperationException($"Could not write to {Name}");
+                    throw new InvalidOperationException($"Could not write to {_name}");
             }
         }
 

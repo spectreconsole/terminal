@@ -14,8 +14,6 @@ namespace Spectre.Terminals.Windows.Emulation
 
         public SafeHandle Handle => _writer.Handle;
 
-        public string Name => _writer.Name;
-
         public Encoding Encoding
         {
             get => _writer.Encoding;
