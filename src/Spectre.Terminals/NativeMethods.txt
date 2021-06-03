@@ -1,6 +1,7 @@
 SetConsoleCP
 GetConsoleCP
 GetConsoleOutputCP
+SetConsoleOutputCP
 GetStdHandle
 WriteFile
 ReadFile

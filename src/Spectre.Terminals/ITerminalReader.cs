@@ -9,7 +9,7 @@ namespace Spectre.Terminals
     public interface ITerminalReader
     {
         /// <summary>
-        /// Gets the encoding.
+        /// Gets or sets the encoding.
         /// </summary>
         Encoding Encoding { get; set; }
 

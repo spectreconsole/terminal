@@ -9,9 +9,9 @@ namespace Spectre.Terminals
     public interface ITerminalWriter
     {
         /// <summary>
-        /// Gets the encoding.
+        /// Gets or sets the encoding.
         /// </summary>
-        Encoding Encoding { get; }
+        Encoding Encoding { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether or not the writer has been redirected.

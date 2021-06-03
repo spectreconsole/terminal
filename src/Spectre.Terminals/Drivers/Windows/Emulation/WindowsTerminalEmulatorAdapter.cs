@@ -13,7 +13,13 @@ namespace Spectre.Terminals.Windows.Emulation
         private readonly WindowsTerminalState _state;
 
         public SafeHandle Handle => _writer.Handle;
-        public Encoding Encoding => _writer.Encoding;
+
+        public Encoding Encoding
+        {
+            get => _writer.Encoding;
+            set => _writer.Encoding = value;
+        }
+
         public bool IsRedirected => _writer.IsRedirected;
 
         public WindowsTerminalEmulatorAdapter(IWindowsTerminalWriter writer)
