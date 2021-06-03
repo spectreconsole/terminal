@@ -1,4 +1,4 @@
-# Spectre.Console.Terminal
+# Spectre.Terminals
 
 A terminal abstraction with platform specific drivers.
 
@@ -7,13 +7,13 @@ A terminal abstraction with platform specific drivers.
 - [x] STDIN
   - [x] Read
   - [x] Get encoding
-  - [ ] Set encoding
+  - [x] Set encoding
   - [x] Redirect to custom reader
   - [x] Is handle redirected?
-- [ ]  STDOUT/STDERR
+- [x]  STDOUT/STDERR
   - [x] Write
   - [x] Get encoding
-  - [ ] Set encoding
+  - [x] Set encoding
   - [x] Redirect to custom writer
   - [x] Is handle redirected?
 - [x] Raw mode (enable/disable)
