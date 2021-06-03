@@ -9,6 +9,11 @@ namespace Spectre.Terminals
     public interface ITerminalWriter
     {
         /// <summary>
+        /// Gets the name of the writer.
+        /// </summary>
+        string Name { get; }
+
+        /// <summary>
         /// Gets or sets the encoding.
         /// </summary>
         Encoding Encoding { get; set; }

@@ -9,6 +9,8 @@ namespace Spectre.Terminals.Windows
     {
         private Encoding _encoding;
 
+        public string Name { get; }
+
         public Encoding Encoding
         {
             get => _encoding;
@@ -19,6 +21,7 @@ namespace Spectre.Terminals.Windows
             : base(handle)
         {
             _encoding = EncodingHelper.GetEncodingFromCodePage((int)PInvoke.GetConsoleOutputCP());
+            Name = handle == STD_HANDLE_TYPE.STD_OUTPUT_HANDLE ? "STDOUT" : "STDERR";
         }
 
         public unsafe void Write(ReadOnlySpan<byte> buffer)
@@ -52,7 +55,7 @@ namespace Spectre.Terminals.Windows
                 case WindowsConstants.ERROR_NO_DATA:
                     break;
                 default:
-                    throw new InvalidOperationException("Could not write to buffer");
+                    throw new InvalidOperationException($"Could not write to {Name}");
             }
         }
 

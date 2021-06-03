@@ -10,6 +10,8 @@ namespace Spectre.Terminals.Windows
         private readonly WindowsDriver _driver;
         private Encoding _encoding;
 
+        public string Name { get; } = "STDIN";
+
         public Encoding Encoding
         {
             get => _encoding;
@@ -46,7 +48,7 @@ namespace Spectre.Terminals.Windows
                 case WindowsConstants.ERROR_NO_DATA:
                     break;
                 default:
-                    throw new InvalidOperationException("Could not write to buffer");
+                    throw new InvalidOperationException($"Could not read from {Name}");
             }
 
             return (int)result;

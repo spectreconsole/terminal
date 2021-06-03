@@ -17,6 +17,8 @@ namespace Spectre.Terminals
 
         public bool IsRedirected => GetIsRedirected();
 
+        public string Name => GetName();
+
         public TerminalOutput(ITerminalWriter reader)
         {
             _writer = reader ?? throw new ArgumentNullException(nameof(reader));
@@ -89,6 +91,19 @@ namespace Spectre.Terminals
                 }
 
                 return _writer.IsRedirected;
+            }
+        }
+
+        private string GetName()
+        {
+            lock (_lock)
+            {
+                if (_redirected != null)
+                {
+                    return _redirected.Name;
+                }
+
+                return _writer.Name;
             }
         }
     }

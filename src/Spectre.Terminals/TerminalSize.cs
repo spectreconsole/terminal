@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Spectre.Terminals
@@ -7,6 +8,7 @@ namespace Spectre.Terminals
     /// <summary>
     /// Represents terminal size.
     /// </summary>
+    [DebuggerDisplay("{Width}x{Height}")]
     public readonly struct TerminalSize : IEquatable<TerminalSize>, IEqualityComparer<TerminalSize>
     {
         /// <summary>
@@ -48,6 +50,12 @@ namespace Spectre.Terminals
         public int GetHashCode([DisallowNull] TerminalSize obj)
         {
             return HashCode.Combine(obj.Width, obj.Height);
+        }
+
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            return $"{Width}x{Height}";
         }
     }
 }

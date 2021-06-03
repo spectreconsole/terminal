@@ -233,16 +233,6 @@ namespace Spectre.Terminals.Windows.Emulation
             }
         }
 
-        private static COORD? GetCursorPosition(WindowsTerminalState state)
-        {
-            if (PInvoke.GetConsoleScreenBufferInfo(state.Handle, out var info))
-            {
-                return info.dwCursorPosition;
-            }
-
-            return null;
-        }
-
         private static void SetCursorPosition(WindowsTerminalState state, COORD coordinates)
         {
             coordinates.X = (short)Math.Max(coordinates.X - 1, 0);
