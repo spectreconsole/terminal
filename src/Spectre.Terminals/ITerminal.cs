@@ -17,6 +17,9 @@ namespace Spectre.Terminals
         /// </summary>
         bool IsRawMode { get; }
 
+        /// <summary>
+        /// Occurs when a signal is received.
+        /// </summary>
         event EventHandler<TerminalSignalEventArgs>? Signalled;
 
         /// <summary>

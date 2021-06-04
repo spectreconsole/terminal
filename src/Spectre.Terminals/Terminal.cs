@@ -81,7 +81,7 @@ namespace Spectre.Terminals
         /// <inheritdoc/>
         public bool EmitSignal(TerminalSignal signal)
         {
-            throw new NotImplementedException();
+            return _driver.EmitSignal(signal);
         }
 
         /// <inheritdoc/>
