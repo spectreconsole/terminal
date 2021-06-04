@@ -36,7 +36,7 @@ A terminal abstraction with platform specific drivers.
 - [X] CUP (Cursor position)
 - [X] ED (Erase in display)
 - [X] EL (Erase in line)
-- [ ] SGR (Selection graphic rendition)
+- [x] SGR (Selection graphic rendition)
 - [x] SCP (Save current cursor position)
 - [x] RCP (Restore saved cursor position)
 - [x] DECTCEM 25 (Hide cursor)
