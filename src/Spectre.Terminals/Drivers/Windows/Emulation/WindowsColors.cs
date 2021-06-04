@@ -78,6 +78,10 @@ namespace Spectre.Terminals.Windows.Emulation
             if (number != null && number.Value >= 0 && number.Value < 16)
             {
                 var c = GetColorAttribute(number.Value, !foreground);
+                if (c == null)
+                {
+                    return;
+                }
 
                 if (TryGetConsoleBuffer(out var buffer))
                 {
@@ -91,17 +95,17 @@ namespace Spectre.Terminals.Windows.Emulation
                         attrs &= ~WindowsConstants.Colors.BackgroundMask;
                     }
 
-                    attrs = (short)(((uint)(ushort)attrs) | (ushort)c);
+                    attrs = (short)(((uint)(ushort)attrs) | (ushort)c.Value);
                     PInvoke.SetConsoleTextAttribute(_stdout, (ushort)attrs);
                 }
             }
         }
 
-        private static int GetColorAttribute(int color, bool isBackground)
+        private static int? GetColorAttribute(int color, bool isBackground)
         {
             if ((color & ~0xf) != 0)
             {
-                throw new ArgumentException("Invalid color");
+                return null;
             }
 
             var result = color;
