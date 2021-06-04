@@ -17,6 +17,8 @@ namespace Spectre.Terminals
         /// </summary>
         bool IsRawMode { get; }
 
+        event EventHandler<TerminalSignalEventArgs>? Signalled;
+
         /// <summary>
         /// Gets the terminal size.
         /// </summary>
@@ -36,6 +38,13 @@ namespace Spectre.Terminals
         /// Gets a <see cref="ITerminalWriter"/> for <c>STDERR</c>.
         /// </summary>
         ITerminalWriter Error { get; }
+
+        /// <summary>
+        /// Emits a signal.
+        /// </summary>
+        /// <param name="signal">The signal to emit.</param>
+        /// <returns><c>true</c> if successful, otherwise false.</returns>
+        bool EmitSignal(TerminalSignal signal);
 
         /// <summary>
         /// Enables raw mode.

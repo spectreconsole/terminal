@@ -17,22 +17,17 @@ namespace Spectre.Terminals.Windows
 
         public const uint CONSOLE_TEXTMODE_BUFFER = 1;
 
+        public static class Signals
+        {
+            public const uint CTRL_C_EVENT = 0;
+            public const uint CTRL_BREAK_EVENT = 1;
+        }
+
         public static class Colors
         {
-            public const short Black = 0;
-            public const short ForegroundBlue = 0x1;
-            public const short ForegroundGreen = 0x2;
-            public const short ForegroundRed = 0x4;
-            public const short ForegroundYellow = 0x6;
-            public const short ForegroundIntensity = 0x8;
-            public const short BackgroundBlue = 0x10;
-            public const short BackgroundGreen = 0x20;
-            public const short BackgroundRed = 0x40;
-            public const short BackgroundYellow = 0x60;
-            public const short BackgroundIntensity = 0x80;
-            public const short ForegroundMask = 0xf;
-            public const short BackgroundMask = 0xf0;
-            public const short ColorMask = 0xff;
+            public const short FOREGROUND_MASK = 0xf;
+            public const short BACKGROUND_MASK = 0xf0;
+            public const short COLOR_MASK = 0xff;
         }
     }
 }

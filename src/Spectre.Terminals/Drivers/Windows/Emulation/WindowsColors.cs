@@ -30,7 +30,7 @@ namespace Spectre.Terminals.Windows.Emulation
                 }
 
                 // Get the default colors
-                _defaultColors = (byte)(buffer.wAttributes & WindowsConstants.Colors.ColorMask);
+                _defaultColors = (byte)(buffer.wAttributes & WindowsConstants.Colors.COLOR_MASK);
             }
         }
 
@@ -88,11 +88,11 @@ namespace Spectre.Terminals.Windows.Emulation
                     var attrs = (short)buffer.wAttributes;
                     if (foreground)
                     {
-                        attrs &= ~WindowsConstants.Colors.ForegroundMask;
+                        attrs &= ~WindowsConstants.Colors.FOREGROUND_MASK;
                     }
                     else
                     {
-                        attrs &= ~WindowsConstants.Colors.BackgroundMask;
+                        attrs &= ~WindowsConstants.Colors.BACKGROUND_MASK;
                     }
 
                     attrs = (short)(((uint)(ushort)attrs) | (ushort)c.Value);

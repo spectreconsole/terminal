@@ -24,6 +24,13 @@ namespace Spectre.Terminals
         public bool IsRawMode { get; private set; }
 
         /// <inheritdoc/>
+        public event EventHandler<TerminalSignalEventArgs>? Signalled
+        {
+            add => _driver.Signalled += value;
+            remove => _driver.Signalled += value;
+        }
+
+        /// <inheritdoc/>
         public TerminalSize? Size => _driver.Size;
 
         /// <inheritdoc/>
@@ -69,6 +76,12 @@ namespace Spectre.Terminals
 
             DisableRawMode();
             _driver.Dispose();
+        }
+
+        /// <inheritdoc/>
+        public bool EmitSignal(TerminalSignal signal)
+        {
+            throw new NotImplementedException();
         }
 
         /// <inheritdoc/>

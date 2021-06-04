@@ -15,10 +15,17 @@ namespace Spectre.Terminals.Windows
         private readonly WindowsTerminalReader _input;
         private readonly IWindowsTerminalWriter _output;
         private readonly IWindowsTerminalWriter _error;
+        private readonly WindowsSignals _signals;
 
         public string Name { get; } = "Windows";
         public bool IsRawMode { get; private set; }
         public TerminalSize? Size => GetTerminalSize();
+
+        public event EventHandler<TerminalSignalEventArgs>? Signalled
+        {
+            add => _signals.Signalled += value;
+            remove => _signals.Signalled += value;
+        }
 
         ITerminalReader ITerminalDriver.Input => _input;
         ITerminalWriter ITerminalDriver.Output => _output;
@@ -26,6 +33,8 @@ namespace Spectre.Terminals.Windows
 
         public WindowsDriver(bool emulate = false)
         {
+            _signals = new WindowsSignals();
+
             _input = new WindowsTerminalReader(this);
             _input.AddMode(
                 CONSOLE_MODE.ENABLE_PROCESSED_INPUT |
@@ -68,6 +77,24 @@ namespace Spectre.Terminals.Windows
             _input.Dispose();
             _output.Dispose();
             _error.Dispose();
+            _signals.Dispose();
+        }
+
+        public bool EmitSignal(TerminalSignal signal)
+        {
+            uint? ctrlEvent = signal switch
+            {
+                TerminalSignal.SIGINT => WindowsConstants.Signals.CTRL_C_EVENT,
+                TerminalSignal.SIGQUIT => WindowsConstants.Signals.CTRL_C_EVENT,
+                _ => null,
+            };
+
+            if (ctrlEvent == null)
+            {
+                return false;
+            }
+
+            return PInvoke.GenerateConsoleCtrlEvent(ctrlEvent.Value, 0);
         }
 
         public bool EnableRawMode()
@@ -107,7 +134,8 @@ namespace Spectre.Terminals.Windows
         private TerminalSize? GetTerminalSize()
         {
             if (!PInvoke.GetConsoleScreenBufferInfo(_output.Handle, out var info) &&
-                !PInvoke.GetConsoleScreenBufferInfo(_error.Handle, out info))
+                !PInvoke.GetConsoleScreenBufferInfo(_error.Handle, out info) &&
+                !PInvoke.GetConsoleScreenBufferInfo(_input.Handle, out info))
             {
                 return null;
             }
