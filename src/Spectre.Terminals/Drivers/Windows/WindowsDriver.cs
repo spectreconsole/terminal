@@ -82,19 +82,7 @@ namespace Spectre.Terminals.Windows
 
         public bool EmitSignal(TerminalSignal signal)
         {
-            uint? ctrlEvent = signal switch
-            {
-                TerminalSignal.SIGINT => WindowsConstants.Signals.CTRL_C_EVENT,
-                TerminalSignal.SIGQUIT => WindowsConstants.Signals.CTRL_C_EVENT,
-                _ => null,
-            };
-
-            if (ctrlEvent == null)
-            {
-                return false;
-            }
-
-            return PInvoke.GenerateConsoleCtrlEvent(ctrlEvent.Value, 0);
+            return _signals.Emit(signal);
         }
 
         public bool EnableRawMode()

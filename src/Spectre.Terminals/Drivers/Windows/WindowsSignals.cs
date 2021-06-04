@@ -16,11 +16,11 @@ namespace Spectre.Terminals.Windows
             add
             {
                 _event = value;
-                Install();
+                InstallHandler();
             }
             remove
             {
-                Uninstall();
+                UninstallHandler();
                 _event = null;
             }
         }
@@ -32,7 +32,24 @@ namespace Spectre.Terminals.Windows
 
         public void Dispose()
         {
-            Uninstall();
+            UninstallHandler();
+        }
+
+        public bool Emit(TerminalSignal signal)
+        {
+            uint? ctrlEvent = signal switch
+            {
+                TerminalSignal.SIGINT => WindowsConstants.Signals.CTRL_C_EVENT,
+                TerminalSignal.SIGQUIT => WindowsConstants.Signals.CTRL_C_EVENT,
+                _ => null,
+            };
+
+            if (ctrlEvent == null)
+            {
+                return false;
+            }
+
+            return PInvoke.GenerateConsoleCtrlEvent(ctrlEvent.Value, 0);
         }
 
         private BOOL Callback(uint ctrlType)
@@ -60,7 +77,7 @@ namespace Spectre.Terminals.Windows
             return false;
         }
 
-        private void Install()
+        private void InstallHandler()
         {
             lock (_lock)
             {
@@ -78,7 +95,7 @@ namespace Spectre.Terminals.Windows
             }
         }
 
-        private void Uninstall()
+        private void UninstallHandler()
         {
             lock (_lock)
             {
