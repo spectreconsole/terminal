@@ -4,7 +4,7 @@ A terminal abstraction with platform specific drivers.
 
 ## Features
 
-- [x] Windows
+- [x] **Windows**
   - [x] STDIN
     - [x] Read
     - [x] Get encoding
@@ -43,7 +43,7 @@ A terminal abstraction with platform specific drivers.
     - [x] DECSET 1049 (Enable alternative buffer)
     - [x] DECSET 1049 (Disable alternative buffer)
 
-- [ ] Linux
+- [ ] **Linux**
   - [ ] STDIN
     - [ ] Read
     - [ ] Get encoding
@@ -64,7 +64,7 @@ A terminal abstraction with platform specific drivers.
     - [ ] Get width
     - [ ] Get height
 
-- [ ] macOS
+- [ ] **macOS**
   - [ ] STDIN
     - [ ] Read
     - [ ] Get encoding
