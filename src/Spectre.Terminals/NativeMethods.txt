@@ -10,6 +10,7 @@ GetConsoleMode
 GetFileType
 FlushConsoleInputBuffer
 GetConsoleScreenBufferInfo
+GetConsoleScreenBufferInfoEx
 SetConsoleCursorPosition
 FillConsoleOutputCharacter
 GetConsoleCursorInfo
@@ -18,3 +19,4 @@ CreateConsoleScreenBuffer
 SetConsoleActiveScreenBuffer
 CloseHandle
 GetLargestConsoleWindowSize
+SetConsoleTextAttribute 

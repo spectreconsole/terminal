@@ -115,6 +115,7 @@ namespace Spectre.Terminals.Windows.Emulation
                 'K' => ParseIntegerInstruction(parameters, count => new EraseInLine(count), defaultValue: 0),
                 's' => new StoreCursor(),
                 'u' => new RestoreCursor(),
+                'm' => ParseSgr(parameters),
                 _ => null, // Unknown instruction
             };
         }
@@ -194,6 +195,126 @@ namespace Spectre.Terminals.Windows.Emulation
             }
 
             return null;
+        }
+
+        private static SelectGraphicRendition? ParseSgr(ReadOnlySpan<AnsiSequenceToken> tokens)
+        {
+            if (tokens.Length == 0)
+            {
+                // No parameters is treated like a reset
+                return new SelectGraphicRendition(new[]
+                {
+                    new SelectGraphicRendition.Operation
+                    {
+                        Reset = true,
+                    },
+                });
+            }
+
+            var queue = new Queue<int>();
+            var enumerator = tokens.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                if (enumerator.Current.Type == AnsiSequenceTokenType.Integer)
+                {
+                    queue.Enqueue(int.Parse(enumerator.Current.Content.Span));
+                }
+            }
+
+            var ops = new List<SelectGraphicRendition.Operation>();
+
+            while (queue.Count > 0)
+            {
+                var current = queue.Dequeue();
+
+                if (current == 0)
+                {
+                    // Reset
+                    ops.Add(new SelectGraphicRendition.Operation
+                    {
+                        Reset = true,
+                    });
+                }
+                else if (current >= 30 && current <= 37)
+                {
+                    // 3-bit Foreground number
+                    ops.Add(new SelectGraphicRendition.Operation
+                    {
+                        Foreground = new Color(current - 30),
+                    });
+                }
+                else if (current >= 40 && current <= 47)
+                {
+                    // 3-bit background number
+                    ops.Add(new SelectGraphicRendition.Operation
+                    {
+                        Background = new Color(current - 40),
+                    });
+                }
+                else if (current == 38 || current == 48)
+                {
+                    // 3, 4, or 8-bit colors require at least two arguments
+                    if (queue.Count < 2)
+                    {
+                        // Invalid
+                        return null;
+                    }
+
+                    var isForeground = current == 38;
+
+                    current = queue.Dequeue();
+                    if (current == 5)
+                    {
+                        // Color number
+                        if (queue.Count == 0)
+                        {
+                            // Invalid
+                            return null;
+                        }
+
+                        if (isForeground)
+                        {
+                            ops.Add(new SelectGraphicRendition.Operation
+                            {
+                                Foreground = new Color(queue.Dequeue()),
+                            });
+                        }
+                        else
+                        {
+                            ops.Add(new SelectGraphicRendition.Operation
+                            {
+                                Background = new Color(queue.Dequeue()),
+                            });
+                        }
+                    }
+                    else if (current == 2)
+                    {
+                        // 24-bit colors requires at least three arguments
+                        if (queue.Count < 3)
+                        {
+                            // Invalid
+                            return null;
+                        }
+
+                        if (isForeground)
+                        {
+                            ops.Add(new SelectGraphicRendition.Operation
+                            {
+                                Foreground = new Color(queue.Dequeue(), queue.Dequeue(), queue.Dequeue()),
+                            });
+                        }
+                        else
+                        {
+                            ops.Add(new SelectGraphicRendition.Operation
+                            {
+                                Background = new Color(queue.Dequeue(), queue.Dequeue(), queue.Dequeue()),
+                            });
+                        }
+                    }
+                }
+            }
+
+            return new SelectGraphicRendition(ops);
         }
 
         private static bool IsSequence(ReadOnlySpan<AnsiSequenceToken> tokens, params AnsiSequenceTokenType[] expected)

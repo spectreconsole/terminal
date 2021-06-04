@@ -127,5 +127,7 @@ namespace Spectre.Terminals.Windows.Emulation
         /// <param name="instruction">The instruction.</param>
         /// <param name="state">The state.</param>
         void DisableAlternativeBuffer(DisableAlternativeBuffer instruction, TState state);
+
+        void SelectGraphicRendition(SelectGraphicRendition instruction, TState state);
     }
 }

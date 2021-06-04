@@ -223,6 +223,26 @@ namespace Spectre.Terminals.Windows.Emulation
             }
         }
 
+        void IAnsiSequenceVisitor<WindowsTerminalState>.SelectGraphicRendition(
+            SelectGraphicRendition instruction, WindowsTerminalState state)
+        {
+            foreach (var operation in instruction.Operations)
+            {
+                if (operation.Reset)
+                {
+                    state.Colors.Reset();
+                }
+                else if (operation.Foreground != null)
+                {
+                    state.Colors.SetForeground(operation.Foreground.Value);
+                }
+                else if (operation.Background != null)
+                {
+                    state.Colors.SetBackground(operation.Background.Value);
+                }
+            }
+        }
+
         private static void MoveCursorRelative(WindowsTerminalState state, short x = 0, short y = 0)
         {
             if (PInvoke.GetConsoleScreenBufferInfo(state.Handle, out var info))

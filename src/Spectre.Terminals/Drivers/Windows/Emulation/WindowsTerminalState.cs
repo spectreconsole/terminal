@@ -16,10 +16,13 @@ namespace Spectre.Terminals.Windows.Emulation
         public SafeHandle MainBuffer { get; set; }
         public SafeHandle? AlternativeBuffer { get; set; }
 
-        public WindowsTerminalState(IWindowsTerminalWriter writer)
+        public WindowsColors Colors { get; }
+
+        public WindowsTerminalState(IWindowsTerminalWriter writer, WindowsColors colors)
         {
             MainBuffer = writer.Handle;
             Writer = writer ?? throw new ArgumentNullException(nameof(writer));
+            Colors = colors ?? throw new ArgumentNullException(nameof(colors));
         }
     }
 }

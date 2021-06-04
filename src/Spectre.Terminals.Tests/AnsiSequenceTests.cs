@@ -10,7 +10,7 @@ namespace Spectre.Terminals.Tests
         public sealed class TheInterpretMethod
         {
             [Fact]
-            public void Should_Run_Sequence()
+            public void Should_Interpret_Codes_As_Expected()
             {
                 // Given
                 var printer = new AnsiPrinter();
@@ -39,6 +39,49 @@ namespace Spectre.Terminals.Tests
                         "[EL0] [EL1] [EL2] " +
                         "[SaveCursor] [RestoreCursor] " +
                         "[DisableAltBuffer]");
+            }
+
+            [Theory]
+            [InlineData("\u001b[35m", "[SGR-FG=5]")]
+            [InlineData("\u001b[38;5;29m", "[SGR-FG=29]")]
+            [InlineData("\u001b[38;2;92;128;255m", "[SGR-FG=92,128,255]")]
+            [InlineData("\u001b[42m", "[SGR-BG=2]")]
+            [InlineData("\u001b[48;5;29m", "[SGR-BG=29]")]
+            [InlineData("\u001b[48;2;92;128;255m", "[SGR-BG=92,128,255]")]
+            [InlineData("\u001b[0m", "[SGR-RESET]")]
+            public void Should_Interpret_SGR_Attributes_Correctly(string input, string expected)
+            {
+                // Given
+                var printer = new AnsiPrinter();
+                var state = new StringBuilder();
+
+                // When
+                AnsiInterpreter.Interpret(printer, state, input);
+
+                // Then
+                state.ToString().ShouldBe(expected);
+            }
+
+            [Theory]
+            [InlineData("\u001b[38;5m")]
+            [InlineData("\u001b[38;2;92;128m")]
+            [InlineData("\u001b[38;2;92m")]
+            [InlineData("\u001b[38;2m")]
+            [InlineData("\u001b[48;5m")]
+            [InlineData("\u001b[48;2;92;128m")]
+            [InlineData("\u001b[48;2;92m")]
+            [InlineData("\u001b[48;2m")]
+            public void Should_Not_Parse_Malformed_SGR_Attributes(string input)
+            {
+                // Given
+                var printer = new AnsiPrinter();
+                var state = new StringBuilder();
+
+                // When
+                AnsiInterpreter.Interpret(printer, state, input);
+
+                // Then
+                state.Length.ShouldBe(0);
             }
 
             private sealed class AnsiPrinter : AnsiSequenceVisitor<StringBuilder>
@@ -126,6 +169,25 @@ namespace Spectre.Terminals.Tests
                 protected override void StoreCursor(StoreCursor instruction, StringBuilder state)
                 {
                     state.Append("[SaveCursor]");
+                }
+
+                protected override void SelectGraphicRendition(SelectGraphicRendition instruction, StringBuilder state)
+                {
+                    foreach (var operation in instruction.Operations)
+                    {
+                        if (operation.Reset)
+                        {
+                            state.Append("[SGR-RESET]");
+                        }
+                        else if (operation.Foreground != null)
+                        {
+                            state.Append($"[SGR-FG={operation.Foreground}]");
+                        }
+                        else if (operation.Background != null)
+                        {
+                            state.Append($"[SGR-BG={operation.Background}]");
+                        }
+                    }
                 }
             }
         }

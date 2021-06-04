@@ -52,9 +52,12 @@ namespace Spectre.Terminals.Windows
             if (emulate || (!(_output.GetMode(out var mode) && (mode & CONSOLE_MODE.ENABLE_VIRTUAL_TERMINAL_PROCESSING) != 0)
                 && !(_error.GetMode(out mode) && (mode & CONSOLE_MODE.ENABLE_VIRTUAL_TERMINAL_PROCESSING) != 0)))
             {
+                // Create a
+                var colors = new WindowsColors(_output.Handle, _error.Handle);
+
                 // Wrap STDOUT and STDERR in an emulator
-                _output = new WindowsTerminalEmulatorAdapter(_output);
-                _error = new WindowsTerminalEmulatorAdapter(_error);
+                _output = new WindowsTerminalEmulatorAdapter(_output, colors);
+                _error = new WindowsTerminalEmulatorAdapter(_error, colors);
 
                 // Update the name to reflect the changes
                 Name = "Windows (emulated)";

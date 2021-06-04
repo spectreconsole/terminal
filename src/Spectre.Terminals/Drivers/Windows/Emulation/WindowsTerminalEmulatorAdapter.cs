@@ -22,11 +22,11 @@ namespace Spectre.Terminals.Windows.Emulation
 
         public bool IsRedirected => _writer.IsRedirected;
 
-        public WindowsTerminalEmulatorAdapter(IWindowsTerminalWriter writer)
+        public WindowsTerminalEmulatorAdapter(IWindowsTerminalWriter writer, WindowsColors colors)
         {
             _writer = writer ?? throw new ArgumentNullException(nameof(writer));
             _emulator = new WindowsTerminalEmulator();
-            _state = new WindowsTerminalState(writer);
+            _state = new WindowsTerminalState(writer, colors);
         }
 
         public void Dispose()

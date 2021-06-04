@@ -46,6 +46,7 @@ namespace Spectre.Terminals.Windows.Emulation
             }
             else if (char.IsNumber(current))
             {
+                // Number
                 var start = buffer.Position;
                 while (buffer.CanRead)
                 {
@@ -68,6 +69,7 @@ namespace Spectre.Terminals.Windows.Emulation
             }
             else if (char.IsLetter(current))
             {
+                // Letter
                 var start = buffer.Position;
                 buffer.Discard();
                 token = new AnsiSequenceToken(
@@ -78,6 +80,7 @@ namespace Spectre.Terminals.Windows.Emulation
             }
             else if (current == ';')
             {
+                // Separator
                 var start = buffer.Position;
                 buffer.Discard();
                 token = new AnsiSequenceToken(
@@ -88,6 +91,7 @@ namespace Spectre.Terminals.Windows.Emulation
             }
             else if (current == '?')
             {
+                // Query
                 var start = buffer.Position;
                 buffer.Discard();
                 token = new AnsiSequenceToken(
