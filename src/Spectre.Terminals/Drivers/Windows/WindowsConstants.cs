@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace Spectre.Terminals.Windows
+namespace Spectre.Terminals.Drivers
 {
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore")]
     internal static class WindowsConstants

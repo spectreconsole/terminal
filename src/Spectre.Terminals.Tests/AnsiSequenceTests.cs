@@ -1,6 +1,6 @@
 using System.Text;
 using Shouldly;
-using Spectre.Terminals.Windows.Emulation;
+using Spectre.Terminals.Emulation;
 using Xunit;
 
 namespace Spectre.Terminals.Tests

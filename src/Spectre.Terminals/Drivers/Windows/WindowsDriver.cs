@@ -1,9 +1,9 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Windows.Sdk;
-using Spectre.Terminals.Windows.Emulation;
+using Spectre.Terminals.Emulation;
 
-namespace Spectre.Terminals.Windows
+namespace Spectre.Terminals.Drivers
 {
     internal sealed class WindowsDriver : ITerminalDriver, IDisposable
     {

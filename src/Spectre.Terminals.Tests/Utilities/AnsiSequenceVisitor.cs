@@ -1,4 +1,4 @@
-using Spectre.Terminals.Windows.Emulation;
+using Spectre.Terminals.Emulation;
 
 namespace Spectre.Terminals.Tests
 {

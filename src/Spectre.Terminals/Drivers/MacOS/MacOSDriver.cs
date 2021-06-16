@@ -4,7 +4,7 @@ using static Spectre.Terminals.Drivers.MacOSInterop;
 
 namespace Spectre.Terminals.Drivers
 {
-    internal sealed class MacOSDriver : PosixDriver
+    internal sealed class MacOSDriver : UnixDriver
     {
         private termios? _original;
         private termios? _current;
@@ -13,7 +13,7 @@ namespace Spectre.Terminals.Drivers
 
         public MacOSDriver()
         {
-            if (tcgetattr(PosixConstants.STDIN, out var settings) == 0)
+            if (tcgetattr(UnixConstants.STDIN, out var settings) == 0)
             {
                 // These values are usually the default, but we set them just to be safe.
                 settings.c_cc[VTIME] = 0;
@@ -73,7 +73,7 @@ namespace Spectre.Terminals.Drivers
 
         public override TerminalSize? GetTerminalSize()
         {
-            var result = ioctl(PosixConstants.STDOUT, (UIntPtr)TIOCGWINSZ, out var w);
+            var result = ioctl(UnixConstants.STDOUT, (UIntPtr)TIOCGWINSZ, out var w);
             if (result == 0)
             {
                 return new TerminalSize(w.ws_col, w.ws_row);
@@ -94,7 +94,7 @@ namespace Spectre.Terminals.Drivers
         private bool UpdateSettings(int mode, termios settings)
         {
             int result;
-            while ((result = tcsetattr(PosixConstants.STDIN, mode, settings)) == -1
+            while ((result = tcsetattr(UnixConstants.STDIN, mode, settings)) == -1
                 && Stdlib.GetLastError() == Errno.EINTR)
             {
                 // Retry in case we get interrupted by a signal.

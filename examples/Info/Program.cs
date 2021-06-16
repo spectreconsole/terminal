@@ -1,4 +1,3 @@
-using System.Threading;
 using Spectre.Terminals;
 
 namespace Examples

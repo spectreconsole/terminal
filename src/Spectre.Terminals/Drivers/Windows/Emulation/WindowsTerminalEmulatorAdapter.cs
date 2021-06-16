@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.Windows.Sdk;
 
-namespace Spectre.Terminals.Windows.Emulation
+namespace Spectre.Terminals.Drivers
 {
     internal sealed class WindowsTerminalEmulatorAdapter : IWindowsTerminalWriter
     {

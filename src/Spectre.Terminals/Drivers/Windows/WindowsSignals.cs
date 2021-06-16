@@ -2,7 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 using Microsoft.Windows.Sdk;
 
-namespace Spectre.Terminals.Windows
+namespace Spectre.Terminals.Drivers
 {
     internal sealed class WindowsSignals : IDisposable
     {
