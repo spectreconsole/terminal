@@ -71,14 +71,27 @@ namespace Spectre.Terminals.Drivers
         {
             var number = color.Number;
 
-            if (color.IsRgb)
+            if (color.IsRgb && number == null)
             {
-                // TODO: Find the closest color in the default palette.
+                // TODO: Find the closest color
+                return;
             }
 
-            if (number != null && number.Value >= 0 && number.Value < 16)
+            if (number != null)
             {
-                var c = GetColorAttribute(number.Value, !foreground);
+                var colorNumber = number.Value;
+                if (colorNumber >= 0 && colorNumber < 16)
+                {
+                    // Map the number to 4-bit color
+                    colorNumber = Map4BitColor(colorNumber);
+                }
+                else if (colorNumber < 256)
+                {
+                    // TODO: Support 256-bit colors
+                    return;
+                }
+
+                var c = GetColorAttribute(colorNumber, !foreground);
                 if (c == null)
                 {
                     return;
@@ -109,13 +122,36 @@ namespace Spectre.Terminals.Drivers
                 return null;
             }
 
-            var result = color;
             if (isBackground)
             {
-                result <<= 4;
+                color <<= 4;
             }
 
-            return result;
+            return color;
+        }
+
+        private static int Map4BitColor(int number)
+        {
+            return number switch
+            {
+                0 => 0,
+                1 => 4,
+                2 => 2,
+                3 => 6,
+                4 => 1,
+                5 => 5,
+                6 => 3,
+                7 => 7,
+                8 => 8,
+                9 => 12,
+                10 => 10,
+                11 => 14,
+                12 => 9,
+                13 => 13,
+                14 => 11,
+                15 => 15,
+                _ => number,
+            };
         }
     }
 }
