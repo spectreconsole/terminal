@@ -17,6 +17,10 @@ namespace Spectre.Terminals
             {
                 return new Terminal(new LinuxDriver());
             }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                return new Terminal(new MacOSDriver());
+            }
 
             throw new PlatformNotSupportedException();
         }
