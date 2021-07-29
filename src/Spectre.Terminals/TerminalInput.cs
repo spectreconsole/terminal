@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Spectre.Terminals
 {
-    internal sealed class TerminalInput : ITerminalReader
+    internal sealed class TerminalInput : ITerminalInput
     {
         private readonly ITerminalReader _reader;
         private readonly object _lock;
