@@ -9,6 +9,11 @@ namespace Spectre.Terminals.Drivers
         public const uint TIOCGWINSZ = 0x40087468;
 
         /// <summary>
+        /// termio: Size of the control character array.
+        /// </summary>
+        public const int NCCS = 20;
+
+        /// <summary>
         /// termio: Apply changes immediately.
         /// </summary>
         public const int TCSANOW = 0;

@@ -18,7 +18,7 @@ namespace Spectre.Terminals.Drivers
             public uint c_cflag;
             public uint c_lflag;
             public byte c_line;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = NCCS)]
             public byte[] c_cc;
             public uint c_ispeed;
             public uint c_ospeed;
