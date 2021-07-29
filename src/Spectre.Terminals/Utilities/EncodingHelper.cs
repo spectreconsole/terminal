@@ -2,7 +2,7 @@ using System.Text;
 
 namespace Spectre.Terminals
 {
-    internal static class EncodingHelper
+    internal static partial class EncodingHelper
     {
         static EncodingHelper()
         {

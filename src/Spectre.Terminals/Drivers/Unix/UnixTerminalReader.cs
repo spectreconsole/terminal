@@ -7,13 +7,20 @@ namespace Spectre.Terminals.Drivers
 {
     internal sealed class UnixTerminalReader : ITerminalReader
     {
+        private readonly Encoding _encoding;
+
         public Encoding Encoding
         {
-            get => Encoding.UTF8;
+            get => _encoding;
             set { /* Do nothing for now */ }
         }
 
         public bool IsRedirected => !Syscall.isatty(UnixConstants.STDIN);
+
+        public UnixTerminalReader()
+        {
+            _encoding = EncodingHelper.GetEncodingFromCharset() ?? new UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
+        }
 
         public unsafe int Read(Span<byte> buffer)
         {

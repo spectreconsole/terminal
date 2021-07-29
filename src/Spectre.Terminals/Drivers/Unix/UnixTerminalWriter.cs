@@ -9,10 +9,11 @@ namespace Spectre.Terminals.Drivers
     {
         private readonly int _handle;
         private readonly string _name;
+        private readonly Encoding _encoding;
 
         public Encoding Encoding
         {
-            get => Encoding.UTF8;
+            get => _encoding;
             set { /* Do nothing for now */ }
         }
 
@@ -22,6 +23,7 @@ namespace Spectre.Terminals.Drivers
         {
             _handle = handle;
             _name = handle == UnixConstants.STDIN ? "STDIN" : "STDERR";
+            _encoding = EncodingHelper.GetEncodingFromCharset() ?? new UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
         }
 
         // From https://github.com/alexrp/system-terminal/blob/819090b722e3198b6b932fdd67641371be99e844/src/core/Drivers/UnixTerminalDriver.cs#L111
