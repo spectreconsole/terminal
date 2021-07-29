@@ -20,22 +20,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Drivers\MacOS\" />
-  </ItemGroup>
-  <PropertyGroup>
-    <IsWindows Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">true</IsWindows>
-    <IsMacOs Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">true</IsMacOs>
-    <IsLinux Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">true</IsLinux>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(IsWindows)'=='true'">
-    <DefineConstants>Windows</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(IsMacOs)'=='true'">
-    <DefineConstants>MacOS</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(IsLinux)'=='true'">
-    <DefineConstants>Linux</DefineConstants>
-  </PropertyGroup>
-
 </Project>
