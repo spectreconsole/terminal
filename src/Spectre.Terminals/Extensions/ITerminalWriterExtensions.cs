@@ -1,5 +1,8 @@
 using System;
+
+#if NET5_0_OR_GREATER
 using System.Buffers;
+#endif
 
 namespace Spectre.Terminals
 {
@@ -15,8 +18,12 @@ namespace Spectre.Terminals
         /// <param name="value">The value to write.</param>
         public static void Write(this ITerminalWriter writer, ReadOnlySpan<char> value)
         {
-            _ = writer ?? throw new ArgumentNullException(nameof(writer));
+            if (writer is null)
+            {
+                throw new ArgumentNullException(nameof(writer));
+            }
 
+#if NET5_0_OR_GREATER
             var len = writer.Encoding.GetByteCount(value);
             var array = ArrayPool<byte>.Shared.Rent(len);
 
@@ -30,6 +37,11 @@ namespace Spectre.Terminals
             {
                 ArrayPool<byte>.Shared.Return(array);
             }
+#else
+            var chars = value.ToArray();
+            var bytes = writer.Encoding.GetBytes(chars);
+            writer.Write(new Span<byte>(bytes));
+#endif
         }
 
         /// <summary>

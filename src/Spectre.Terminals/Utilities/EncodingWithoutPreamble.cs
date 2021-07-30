@@ -33,11 +33,6 @@ namespace Spectre.Terminals
             return _encoding.GetByteCount(chars);
         }
 
-        public override int GetByteCount(ReadOnlySpan<char> chars)
-        {
-            return _encoding.GetByteCount(chars);
-        }
-
         public override int GetByteCount(string s)
         {
             return _encoding.GetByteCount(s);
@@ -56,11 +51,6 @@ namespace Spectre.Terminals
         public override byte[] GetBytes(char[] chars, int index, int count)
         {
             return _encoding.GetBytes(chars, index, count);
-        }
-
-        public override int GetBytes(ReadOnlySpan<char> chars, Span<byte> bytes)
-        {
-            return _encoding.GetBytes(chars, bytes);
         }
 
         public override byte[] GetBytes(string s)
@@ -83,11 +73,6 @@ namespace Spectre.Terminals
             return _encoding.GetCharCount(bytes);
         }
 
-        public override int GetCharCount(ReadOnlySpan<byte> bytes)
-        {
-            return _encoding.GetCharCount(bytes);
-        }
-
         public override unsafe int GetChars(byte* bytes, int byteCount, char* chars, int charCount)
         {
             return _encoding.GetChars(bytes, byteCount, chars, charCount);
@@ -101,11 +86,6 @@ namespace Spectre.Terminals
         public override char[] GetChars(byte[] bytes, int index, int count)
         {
             return _encoding.GetChars(bytes, index, count);
-        }
-
-        public override int GetChars(ReadOnlySpan<byte> bytes, Span<char> chars)
-        {
-            return _encoding.GetChars(bytes, chars);
         }
 
         public override Decoder GetDecoder()
@@ -162,5 +142,27 @@ namespace Spectre.Terminals
         {
             return _encoding.GetMaxByteCount(byteCount);
         }
+
+#if NET5_0_OR_GREATER
+        public override int GetByteCount(ReadOnlySpan<char> chars)
+        {
+            return _encoding.GetByteCount(chars);
+        }
+
+        public override int GetBytes(ReadOnlySpan<char> chars, Span<byte> bytes)
+        {
+            return _encoding.GetBytes(chars, bytes);
+        }
+
+        public override int GetCharCount(ReadOnlySpan<byte> bytes)
+        {
+            return _encoding.GetCharCount(bytes);
+        }
+
+        public override int GetChars(ReadOnlySpan<byte> bytes, Span<char> chars)
+        {
+            return _encoding.GetChars(bytes, chars);
+        }
+#endif
     }
 }

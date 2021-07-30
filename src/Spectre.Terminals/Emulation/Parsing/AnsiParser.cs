@@ -137,7 +137,16 @@ namespace Spectre.Terminals.Emulation
                 return null;
             }
 
-            return func(int.Parse(tokens[0].Content.Span));
+            return func(ParseInteger(tokens[0].Content.Span));
+        }
+
+        private static int ParseInteger(ReadOnlySpan<char> span, IFormatProvider? provider = null)
+        {
+#if NET5_0_OR_GREATER
+            return int.Parse(span, provider: provider);
+#else
+            return int.Parse(new string(span.ToArray()), provider);
+#endif
         }
 
         private static AnsiInstruction? ParseIntegerInstruction(
@@ -150,7 +159,7 @@ namespace Spectre.Terminals.Emulation
                 return null;
             }
 
-            if (predicate(int.Parse(tokens[0].Content.Span)))
+            if (predicate(ParseInteger(tokens[0].Content.Span)))
             {
                 return func();
             }
@@ -166,8 +175,8 @@ namespace Spectre.Terminals.Emulation
                 {
                     // [ROW];[COLUMN]H
                     return new CursorPosition(
-                        int.Parse(tokens[2].Content.Span, provider: CultureInfo.InvariantCulture),
-                        int.Parse(tokens[0].Content.Span, provider: CultureInfo.InvariantCulture));
+                        ParseInteger(tokens[2].Content.Span, CultureInfo.InvariantCulture),
+                        ParseInteger(tokens[0].Content.Span, CultureInfo.InvariantCulture));
                 }
             }
             else if (tokens.Length == 2)
@@ -175,12 +184,12 @@ namespace Spectre.Terminals.Emulation
                 if (IsSequence(tokens, AnsiSequenceTokenType.Integer, AnsiSequenceTokenType.Delimiter))
                 {
                     // [ROW];H
-                    return new CursorPosition(1, int.Parse(tokens[0].Content.Span, provider: CultureInfo.InvariantCulture));
+                    return new CursorPosition(1, ParseInteger(tokens[0].Content.Span, CultureInfo.InvariantCulture));
                 }
                 else if (IsSequence(tokens, AnsiSequenceTokenType.Integer, AnsiSequenceTokenType.Delimiter))
                 {
                     // ;[COLUMN]H
-                    return new CursorPosition(int.Parse(tokens[0].Content.Span, provider: CultureInfo.InvariantCulture), 1);
+                    return new CursorPosition(ParseInteger(tokens[0].Content.Span, CultureInfo.InvariantCulture), 1);
                 }
             }
             else if (tokens.Length == 1)
@@ -190,7 +199,7 @@ namespace Spectre.Terminals.Emulation
                     // [ROW]H
                     return new CursorPosition(
                         1,
-                        int.Parse(tokens[0].Content.Span, provider: CultureInfo.InvariantCulture));
+                        ParseInteger(tokens[0].Content.Span, CultureInfo.InvariantCulture));
                 }
             }
 
@@ -217,7 +226,7 @@ namespace Spectre.Terminals.Emulation
             {
                 if (enumerator.Current.Type == AnsiSequenceTokenType.Integer)
                 {
-                    queue.Enqueue(int.Parse(enumerator.Current.Content.Span));
+                    queue.Enqueue(ParseInteger(enumerator.Current.Content.Span));
                 }
             }
 

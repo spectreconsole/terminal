@@ -9,7 +9,11 @@ namespace Spectre.Terminals.Drivers
         public void Write(WindowsTerminalState state, ReadOnlySpan<byte> buffer)
         {
             // TODO: Not very efficient
+#if NET5_0_OR_GREATER
             var text = state.Encoding.GetString(buffer);
+#else
+            var text = state.Encoding.GetString(buffer.ToArray());
+#endif
             AnsiInterpreter.Interpret(this, state, text);
         }
 
