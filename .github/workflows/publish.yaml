@@ -9,6 +9,7 @@ on:
     paths:
       - 'src/**'
       - '.github/**'
+      - 'examples/**'
 
 env:
   # Set the DOTNET_SKIP_FIRST_TIME_EXPERIENCE environment variable to stop wasting time caching packages
