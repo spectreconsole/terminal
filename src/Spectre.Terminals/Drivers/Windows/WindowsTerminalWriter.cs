@@ -46,8 +46,7 @@ namespace Spectre.Terminals.Drivers
                 }
             }
 
-            var error = Marshal.GetLastWin32Error();
-            switch (error)
+            switch (Marshal.GetLastWin32Error())
             {
                 case WindowsConstants.ERROR_HANDLE_EOF:
                 case WindowsConstants.ERROR_BROKEN_PIPE:

@@ -9,6 +9,8 @@ namespace Spectre.Terminals.Drivers
         public const int ERROR_BROKEN_PIPE = 109;
         public const int ERROR_NO_DATA = 232;
 
+        public const int KEY_EVENT = 0x0001;
+
         public const uint GENERIC_READ = 0x80000000;
         public const uint GENERIC_WRITE = 0x40000000;
 

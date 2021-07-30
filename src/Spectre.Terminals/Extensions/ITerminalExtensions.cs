@@ -8,26 +8,6 @@ namespace Spectre.Terminals
     public static partial class ITerminalExtensions
     {
         /// <summary>
-        /// Reads a single <see cref="byte"/> from the terminal's input handle.
-        /// </summary>
-        /// <remarks>Puts the terminal temporary in raw mode while reading occurs.</remarks>
-        /// <param name="terminal">The terminal.</param>
-        /// <returns>The read <see cref="byte"/>, or <c>null</c> if there was nothing to read.</returns>
-        public static byte? ReadRaw(this ITerminal terminal)
-        {
-            try
-            {
-                terminal.EnableRawMode();
-                Span<byte> span = stackalloc byte[1];
-                return terminal.Input.Read(span) == 1 ? span[0] : null;
-            }
-            finally
-            {
-                terminal.DisableRawMode();
-            }
-        }
-
-        /// <summary>
         /// Writes the specified buffer to the terminal's output handle.
         /// </summary>
         /// <param name="terminal">The terminal.</param>

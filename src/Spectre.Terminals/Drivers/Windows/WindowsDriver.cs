@@ -1,11 +1,10 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Windows.Sdk;
-using Spectre.Terminals.Emulation;
 
 namespace Spectre.Terminals.Drivers
 {
-    internal sealed class WindowsDriver : ITerminalDriver, IDisposable
+    internal sealed class WindowsDriver : ITerminalDriver
     {
         [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore")]
         private const CONSOLE_MODE IN_MODE = CONSOLE_MODE.ENABLE_PROCESSED_INPUT | CONSOLE_MODE.ENABLE_LINE_INPUT | CONSOLE_MODE.ENABLE_ECHO_INPUT;
@@ -37,11 +36,10 @@ namespace Spectre.Terminals.Drivers
 
             _input = new WindowsTerminalReader(this);
             _input.AddMode(
-                CONSOLE_MODE.ENABLE_PROCESSED_INPUT |
                 CONSOLE_MODE.ENABLE_LINE_INPUT |
                 CONSOLE_MODE.ENABLE_ECHO_INPUT |
-                CONSOLE_MODE.ENABLE_INSERT_MODE |
-                CONSOLE_MODE.ENABLE_VIRTUAL_TERMINAL_INPUT);
+                CONSOLE_MODE.ENABLE_PROCESSED_INPUT |
+                CONSOLE_MODE.ENABLE_INSERT_MODE);
 
             _output = new WindowsTerminalWriter(STD_HANDLE_TYPE.STD_OUTPUT_HANDLE);
             _output.AddMode(
@@ -82,7 +80,7 @@ namespace Spectre.Terminals.Drivers
 
         public bool EmitSignal(TerminalSignal signal)
         {
-            return _signals.Emit(signal);
+            return WindowsSignals.Emit(signal);
         }
 
         public bool EnableRawMode()

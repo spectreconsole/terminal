@@ -34,13 +34,13 @@ namespace Spectre.Terminals
         public TerminalSize? Size => _driver.Size;
 
         /// <inheritdoc/>
-        public ITerminalInput Input { get; }
+        public TerminalInput Input { get; }
 
         /// <inheritdoc/>
-        public ITerminalOutput Output { get; }
+        public TerminalOutput Output { get; }
 
         /// <inheritdoc/>
-        public ITerminalOutput Error { get; }
+        public TerminalOutput Error { get; }
 
         static Terminal()
         {

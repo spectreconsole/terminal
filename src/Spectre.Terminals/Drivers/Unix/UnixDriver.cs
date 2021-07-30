@@ -122,7 +122,7 @@ namespace Spectre.Terminals.Drivers
                             if (!signalEventArguments.Cancel)
                             {
                                 //// Get the value early to avoid ObjectDisposedException.
-                                var num = ((UnixSignal)signal).Signum;
+                                var num = signal.Signum;
 
                                 //// Remove our signal handler and send the signal again. Since we
                                 //// have overwritten the signal handlers in CoreCLR and

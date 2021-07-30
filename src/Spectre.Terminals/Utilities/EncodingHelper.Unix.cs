@@ -1,10 +1,11 @@
+// Parts of this code used from: https://github.com/dotnet/runtime
+// Licensed to the .NET Foundation under one or more agreements.
+
 using System;
 using System.Text;
 
 namespace Spectre.Terminals
 {
-    // Adapted from: https://github.com/dotnet/runtime/blob/main/src/libraries/Common/src/System/Text/EncodingHelper.Unix.cs
-    // Licensed to the .NET Foundation under one or more agreements.
     internal static partial class EncodingHelper
     {
         /// <summary>Environment variables that should be checked, in order, for locale.</summary>
