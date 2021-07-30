@@ -35,7 +35,7 @@ namespace Spectre.Terminals.Drivers
             UninstallHandler();
         }
 
-        public bool Emit(TerminalSignal signal)
+        public static bool Emit(TerminalSignal signal)
         {
             uint? ctrlEvent = signal switch
             {

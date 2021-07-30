@@ -2,6 +2,10 @@
 
 A terminal abstraction with platform specific drivers.
 
+## Disclaimer
+This is a work in progress, and usage is not yet recommended.  
+Things will change, move around and break.
+
 ## Acknowledgement
 
 Inspired by [system-terminal](https://github.com/alexrp/system-terminal) written by Alex Rønne Petersen.
@@ -10,7 +14,9 @@ Inspired by [system-terminal](https://github.com/alexrp/system-terminal) written
 
 - [x] **Windows**
   - [x] STDIN
-    - [x] Read
+    - [x] Read Key
+    - [x] Read Single Character (if raw mode is enabled)
+    - [x] Read Line
     - [x] Get encoding
     - [x] Set encoding
     - [x] Redirect to custom reader
@@ -23,8 +29,8 @@ Inspired by [system-terminal](https://github.com/alexrp/system-terminal) written
     - [x] Is handle redirected?
   - [x] Raw mode (enable/disable)
   - [x] Signals
-    - [x] SIGINT
-    - [x] SIGQUIT
+    - [x] SIGINT (CTRL+C)
+    - [x] SIGQUIT (CTRL+BREAK)
   - [x] Window
     - [x] Get width
     - [x] Get height
@@ -48,8 +54,10 @@ Inspired by [system-terminal](https://github.com/alexrp/system-terminal) written
     - [x] DECSET 1049 (Disable alternative buffer)
 
 - [x] **Linux**
-  - [x] STDIN
-    - [x] Read
+  - [ ] STDIN
+    - [ ] Read Key
+    - [ ] Read Single Character
+    - [ ] Read Line
     - [x] Get encoding
     - [x] Set encoding (NOT SUPPORTED)
     - [x] Redirect to custom reader
@@ -69,8 +77,10 @@ Inspired by [system-terminal](https://github.com/alexrp/system-terminal) written
     - [x] Get height
 
 - [x] **macOS**
-  - [x] STDIN
-    - [x] Read
+  - [ ] STDIN
+    - [ ] Read Key
+    - [ ] Read Single Character
+    - [ ] Read Line
     - [x] Get encoding
     - [x] Set encoding (NOT SUPPORTED)
     - [x] Redirect to custom reader

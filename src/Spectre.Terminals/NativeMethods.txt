@@ -22,3 +22,6 @@ GetLargestConsoleWindowSize
 SetConsoleTextAttribute
 SetConsoleCtrlHandler
 GenerateConsoleCtrlEvent
+ReadConsole
+ReadConsoleInput
+PeekConsoleInput

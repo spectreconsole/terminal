@@ -7,11 +7,15 @@ namespace Spectre.Terminals.Drivers
 {
     internal abstract class WindowsTerminalHandle : IDisposable
     {
+        private readonly object _lock;
+
         public SafeHandle Handle { get; set; }
         public bool IsRedirected { get; }
 
-        public WindowsTerminalHandle(STD_HANDLE_TYPE handle)
+        protected WindowsTerminalHandle(STD_HANDLE_TYPE handle)
         {
+            _lock = new object();
+
             Handle = PInvoke.GetStdHandle_SafeHandle(handle);
             IsRedirected = !GetMode(out _) || (PInvoke.GetFileType(Handle) & 2) == 0;
         }
@@ -35,22 +39,28 @@ namespace Spectre.Terminals.Drivers
 
         public unsafe bool AddMode(CONSOLE_MODE mode)
         {
-            if (GetMode(out var currentMode))
+            lock (_lock)
             {
-                return PInvoke.SetConsoleMode(Handle, currentMode.Value | mode);
-            }
+                if (GetMode(out var currentMode))
+                {
+                    return PInvoke.SetConsoleMode(Handle, currentMode.Value | mode);
+                }
 
-            return false;
+                return false;
+            }
         }
 
         public unsafe bool RemoveMode(CONSOLE_MODE mode)
         {
-            if (GetMode(out var currentMode))
+            lock (_lock)
             {
-                return PInvoke.SetConsoleMode(Handle, currentMode.Value & ~mode);
-            }
+                if (GetMode(out var currentMode))
+                {
+                    return PInvoke.SetConsoleMode(Handle, currentMode.Value & ~mode);
+                }
 
-            return false;
+                return false;
+            }
         }
     }
 }

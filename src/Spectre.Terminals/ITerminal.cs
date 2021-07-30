@@ -28,19 +28,19 @@ namespace Spectre.Terminals
         TerminalSize? Size { get; }
 
         /// <summary>
-        /// Gets a <see cref="ITerminalInput"/> for <c>STDIN</c>.
+        /// Gets a <see cref="TerminalOutput"/> for <c>STDIN</c>.
         /// </summary>
-        ITerminalInput Input { get; }
+        TerminalInput Input { get; }
 
         /// <summary>
-        /// Gets a <see cref="ITerminalOutput"/> for <c>STDOUT</c>.
+        /// Gets a <see cref="TerminalOutput"/> for <c>STDOUT</c>.
         /// </summary>
-        ITerminalOutput Output { get; }
+        TerminalOutput Output { get; }
 
         /// <summary>
-        /// Gets a <see cref="ITerminalOutput"/> for <c>STDERR</c>.
+        /// Gets a <see cref="TerminalOutput"/> for <c>STDERR</c>.
         /// </summary>
-        ITerminalOutput Error { get; }
+        TerminalOutput Error { get; }
 
         /// <summary>
         /// Emits a signal.

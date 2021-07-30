@@ -15,6 +15,8 @@ namespace Spectre.Terminals.Drivers
             set { /* Do nothing for now */ }
         }
 
+        public bool IsKeyAvailable => throw new NotSupportedException("Not yet supported");
+
         public bool IsRedirected => !Syscall.isatty(UnixConstants.STDIN);
 
         public UnixTerminalReader()
@@ -22,7 +24,22 @@ namespace Spectre.Terminals.Drivers
             _encoding = EncodingHelper.GetEncodingFromCharset() ?? new UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
         }
 
-        public unsafe int Read(Span<byte> buffer)
+        public int Read()
+        {
+            throw new NotSupportedException("Not yet supported");
+        }
+
+        public string? ReadLine()
+        {
+            throw new NotSupportedException("Not yet supported");
+        }
+
+        public ConsoleKeyInfo ReadKey()
+        {
+            throw new NotSupportedException("Not yet supported");
+        }
+
+        private static unsafe int Read(Span<byte> buffer)
         {
             if (buffer.IsEmpty)
             {

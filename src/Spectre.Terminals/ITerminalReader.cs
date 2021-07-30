@@ -14,23 +14,43 @@ namespace Spectre.Terminals
         Encoding Encoding { get; set; }
 
         /// <summary>
+        /// Gets a value indicating whether a key press is available in the input stream.
+        /// </summary>
+        bool IsKeyAvailable { get; }
+
+        /// <summary>
         /// Gets a value indicating whether or not the reader has been redirected.
         /// </summary>
         bool IsRedirected { get; }
 
         /// <summary>
-        /// Reads a sequence of bytes from the current reader.
+        /// Reads the next character from the standard input stream.
         /// </summary>
-        /// <param name="buffer">
-        /// A region of memory. When this method returns, the contents of this region are
-        /// replaced by the bytes read from the current source.
-        /// </param>
         /// <returns>
-        /// The total number of bytes read into the buffer.
-        /// This can be less than the number of bytes allocated in the buffer if
-        /// that many bytes are not currently available, or zero (0) if the end
-        /// of the stream has been reached.
+        /// The next character from the input stream, or negative one (-1)
+        /// if there are currently no more characters to be read.
         /// </returns>
-        int Read(Span<byte> buffer);
+        int Read();
+
+        /// <summary>
+        /// Reads the next line of characters from the standard input stream.
+        /// </summary>
+        /// <returns>
+        /// The next line of characters from the input stream, or null if
+        /// no more lines are available.
+        /// </returns>
+        string? ReadLine();
+
+        /// <summary>
+        /// Obtains the next character or function key pressed by the user.
+        /// </summary>
+        /// <returns>
+        /// An object that describes the System.ConsoleKey constant and Unicode character,
+        /// if any, that correspond to the pressed console key. The System.ConsoleKeyInfo
+        /// object also describes, in a bitwise combination of System.ConsoleModifiers values,
+        /// whether one or more Shift, Alt, or Ctrl modifier keys was pressed simultaneously
+        /// with the console key.
+        /// </returns>
+        ConsoleKeyInfo ReadKey();
     }
 }

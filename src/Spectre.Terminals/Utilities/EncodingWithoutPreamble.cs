@@ -11,7 +11,14 @@ namespace Spectre.Terminals
 
         public override int CodePage => _encoding.CodePage;
 
+        public override bool IsSingleByte => _encoding.IsSingleByte;
+
         public override string EncodingName => _encoding.EncodingName;
+
+        public override string WebName
+        {
+            get { return _encoding.WebName; }
+        }
 
         public EncodingWithoutPreamble(Encoding encoding)
         {
@@ -36,6 +43,11 @@ namespace Spectre.Terminals
         public override int GetByteCount(string s)
         {
             return _encoding.GetByteCount(s);
+        }
+
+        public override int GetByteCount(char[] chars, int index, int count)
+        {
+            return _encoding.GetByteCount(chars, index, count);
         }
 
         public override unsafe int GetBytes(char* chars, int charCount, byte* bytes, int byteCount)
@@ -113,11 +125,6 @@ namespace Spectre.Terminals
             return _encoding.GetString(bytes, index, count);
         }
 
-        public override int GetByteCount(char[] chars, int index, int count)
-        {
-            return _encoding.GetByteCount(chars, index, count);
-        }
-
         public override int GetBytes(char[] chars, int charIndex, int charCount, byte[] bytes, int byteIndex)
         {
             return _encoding.GetBytes(chars, charIndex, charCount, bytes, byteIndex);
@@ -144,6 +151,8 @@ namespace Spectre.Terminals
         }
 
 #if NET5_0_OR_GREATER
+        public override ReadOnlySpan<byte> Preamble => ReadOnlySpan<byte>.Empty;
+
         public override int GetByteCount(ReadOnlySpan<char> chars)
         {
             return _encoding.GetByteCount(chars);

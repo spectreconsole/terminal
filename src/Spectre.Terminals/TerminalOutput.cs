@@ -1,28 +1,52 @@
 using System;
 using System.Text;
 
+#if NET5_0_OR_GREATER
+using System.Buffers;
+#endif
+
 namespace Spectre.Terminals
 {
-    internal sealed class TerminalOutput : ITerminalOutput
+    /// <summary>
+    /// Represents a mechanism to write to a terminal output handle.
+    /// </summary>
+    public sealed class TerminalOutput
     {
         private readonly ITerminalWriter _writer;
         private readonly object _lock;
         private ITerminalWriter? _redirected;
 
+        /// <summary>
+        /// Gets or sets the encoding.
+        /// </summary>
         public Encoding Encoding
         {
             get => GetEncoding();
             set => SetEncoding(value);
         }
 
+        /// <summary>
+        /// Gets a value indicating whether or not output has been redirected.
+        /// </summary>
         public bool IsRedirected => GetIsRedirected();
 
-        public TerminalOutput(ITerminalWriter reader)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TerminalOutput"/> class.
+        /// </summary>
+        /// <param name="writer">The terminal writer.</param>
+        public TerminalOutput(ITerminalWriter writer)
         {
-            _writer = reader ?? throw new ArgumentNullException(nameof(reader));
+            _writer = writer ?? throw new ArgumentNullException(nameof(writer));
             _lock = new object();
         }
 
+        /// <summary>
+        /// Redirects input to the specified <see cref="ITerminalWriter"/>.
+        /// </summary>
+        /// <param name="writer">
+        /// The writer to redirect to,
+        /// or <c>null</c>, if the current redirected writer should be removed.
+        /// </param>
         public void Redirect(ITerminalWriter? writer)
         {
             lock (_lock)
@@ -31,18 +55,33 @@ namespace Spectre.Terminals
             }
         }
 
-        public void Write(ReadOnlySpan<byte> buffer)
+        /// <summary>
+        /// Writes the specified buffer.
+        /// </summary>
+        /// <param name="value">The value to write.</param>
+        public void Write(ReadOnlySpan<char> value)
         {
             lock (_lock)
             {
-                if (_redirected != null)
+#if NET5_0_OR_GREATER
+                var len = Encoding.GetByteCount(value);
+                var array = ArrayPool<byte>.Shared.Rent(len);
+
+                try
                 {
-                    _redirected.Write(buffer);
+                    var span = array.AsSpan(0, len);
+                    Encoding.GetBytes(value, span);
+                    GetWriter().Write(span);
                 }
-                else
+                finally
                 {
-                    _writer.Write(buffer);
+                    ArrayPool<byte>.Shared.Return(array);
                 }
+#else
+                var chars = value.ToArray();
+                var bytes = Encoding.GetBytes(chars);
+                GetWriter().Write(new Span<byte>(bytes));
+#endif
             }
         }
 
@@ -50,12 +89,7 @@ namespace Spectre.Terminals
         {
             lock (_lock)
             {
-                if (_redirected != null)
-                {
-                    return _redirected.Encoding;
-                }
-
-                return _writer.Encoding;
+                return GetWriter().Encoding;
             }
         }
 
@@ -68,14 +102,7 @@ namespace Spectre.Terminals
 
             lock (_lock)
             {
-                if (_redirected != null)
-                {
-                    _redirected.Encoding = encoding;
-                }
-                else
-                {
-                    _writer.Encoding = encoding;
-                }
+                GetWriter().Encoding = encoding;
             }
         }
 
@@ -83,13 +110,13 @@ namespace Spectre.Terminals
         {
             lock (_lock)
             {
-                if (_redirected != null)
-                {
-                    return _redirected.IsRedirected;
-                }
-
-                return _writer.IsRedirected;
+                return GetWriter().IsRedirected;
             }
+        }
+
+        private ITerminalWriter GetWriter()
+        {
+            return _redirected ?? _writer;
         }
     }
 }
