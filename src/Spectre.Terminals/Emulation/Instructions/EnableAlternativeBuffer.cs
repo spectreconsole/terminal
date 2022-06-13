@@ -1,10 +1,9 @@
-namespace Spectre.Terminals.Emulation
+namespace Spectre.Terminals.Emulation;
+
+internal sealed class EnableAlternativeBuffer : AnsiInstruction
 {
-    internal sealed class EnableAlternativeBuffer : AnsiInstruction
+    public override void Accept<TState>(IAnsiSequenceVisitor<TState> visitor, TState state)
     {
-        public override void Accept<TState>(IAnsiSequenceVisitor<TState> visitor, TState state)
-        {
-            visitor.EnableAlternativeBuffer(this, state);
-        }
+        visitor.EnableAlternativeBuffer(this, state);
     }
 }

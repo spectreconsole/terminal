@@ -1,28 +1,24 @@
-using System;
-using System.Collections.Generic;
+namespace Spectre.Terminals;
 
-namespace Spectre.Terminals
+internal static class EnumerableExtensions
 {
-    internal static class EnumerableExtensions
+    public static IEnumerable<(bool First, bool Last, T Item)> Enumerate<T>(this IEnumerator<T> source)
     {
-        public static IEnumerable<(bool First, bool Last, T Item)> Enumerate<T>(this IEnumerator<T> source)
+        if (source is null)
         {
-            if (source is null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
+            throw new ArgumentNullException(nameof(source));
+        }
 
-            var first = true;
-            var last = !source.MoveNext();
-            T current;
+        var first = true;
+        var last = !source.MoveNext();
+        T current;
 
-            for (var index = 0; !last; index++)
-            {
-                current = source.Current;
-                last = !source.MoveNext();
-                yield return (first, last, current);
-                first = false;
-            }
+        for (var index = 0; !last; index++)
+        {
+            current = source.Current;
+            last = !source.MoveNext();
+            yield return (first, last, current);
+            first = false;
         }
     }
 }

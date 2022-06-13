@@ -1,15 +1,14 @@
-namespace Spectre.Terminals.Emulation
+namespace Spectre.Terminals.Emulation;
+
+internal enum AnsiSequenceTokenType
 {
-    internal enum AnsiSequenceTokenType
-    {
-        Unknown,
-        Csi,
-        Character,
-        Integer,
-        Delimiter,
-        Bang,
-        Query,
-        Equals,
-        Send,
-    }
+    Unknown,
+    Csi,
+    Character,
+    Integer,
+    Delimiter,
+    Bang,
+    Query,
+    Equals,
+    Send,
 }

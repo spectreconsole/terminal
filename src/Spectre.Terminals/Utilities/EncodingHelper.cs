@@ -1,17 +1,14 @@
-using System.Text;
+namespace Spectre.Terminals;
 
-namespace Spectre.Terminals
+internal static partial class EncodingHelper
 {
-    internal static partial class EncodingHelper
+    static EncodingHelper()
     {
-        static EncodingHelper()
-        {
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-        }
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+    }
 
-        internal static Encoding GetEncodingFromCodePage(int codePage)
-        {
-            return Encoding.GetEncoding(codePage) ?? Encoding.UTF8;
-        }
+    internal static Encoding GetEncodingFromCodePage(int codePage)
+    {
+        return Encoding.GetEncoding(codePage) ?? Encoding.UTF8;
     }
 }

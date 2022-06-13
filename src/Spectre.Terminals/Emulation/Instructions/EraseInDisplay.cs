@@ -1,17 +1,16 @@
-namespace Spectre.Terminals.Emulation
+namespace Spectre.Terminals.Emulation;
+
+internal sealed class EraseInDisplay : AnsiInstruction
 {
-    internal sealed class EraseInDisplay : AnsiInstruction
+    public int Mode { get; }
+
+    public EraseInDisplay(int mode)
     {
-        public int Mode { get; }
+        Mode = mode;
+    }
 
-        public EraseInDisplay(int mode)
-        {
-            Mode = mode;
-        }
-
-        public override void Accept<TState>(IAnsiSequenceVisitor<TState> visitor, TState context)
-        {
-            visitor.EraseInDisplay(this, context);
-        }
+    public override void Accept<TState>(IAnsiSequenceVisitor<TState> visitor, TState context)
+    {
+        visitor.EraseInDisplay(this, context);
     }
 }

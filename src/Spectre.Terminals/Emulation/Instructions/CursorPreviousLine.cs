@@ -1,17 +1,16 @@
-namespace Spectre.Terminals.Emulation
+namespace Spectre.Terminals.Emulation;
+
+internal sealed class CursorPreviousLine : AnsiInstruction
 {
-    internal sealed class CursorPreviousLine : AnsiInstruction
+    public int Count { get; }
+
+    public CursorPreviousLine(int count)
     {
-        public int Count { get; }
+        Count = count;
+    }
 
-        public CursorPreviousLine(int count)
-        {
-            Count = count;
-        }
-
-        public override void Accept<TState>(IAnsiSequenceVisitor<TState> visitor, TState context)
-        {
-            visitor.CursorPreviousLine(this, context);
-        }
+    public override void Accept<TState>(IAnsiSequenceVisitor<TState> visitor, TState context)
+    {
+        visitor.CursorPreviousLine(this, context);
     }
 }
