@@ -4,9 +4,6 @@
 // </auto-generated>
 // ------------------------------------------------------------------------------
 
-using System;
-using System.Runtime.InteropServices;
-
 namespace Spectre.Terminals.Drivers
 {
     internal sealed partial class LinuxInterop

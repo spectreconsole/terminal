@@ -1,10 +1,9 @@
-namespace Spectre.Terminals.Emulation
+namespace Spectre.Terminals.Emulation;
+
+internal sealed class ShowCursor : AnsiInstruction
 {
-    internal sealed class ShowCursor : AnsiInstruction
+    public override void Accept<TState>(IAnsiSequenceVisitor<TState> visitor, TState state)
     {
-        public override void Accept<TState>(IAnsiSequenceVisitor<TState> visitor, TState state)
-        {
-            visitor.ShowCursor(this, state);
-        }
+        visitor.ShowCursor(this, state);
     }
 }

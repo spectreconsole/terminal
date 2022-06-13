@@ -1,117 +1,114 @@
-using System;
+namespace Spectre.Terminals;
 
-namespace Spectre.Terminals
+/// <summary>
+/// Represents a terminal.
+/// </summary>
+public sealed class Terminal : ITerminal
 {
+    private static readonly Lazy<ITerminal> _instance;
+
     /// <summary>
-    /// Represents a terminal.
+    /// Gets a lazily constructed, shared <see cref="ITerminal"/> instance.
     /// </summary>
-    public sealed class Terminal : ITerminal
+    public static ITerminal Shared => _instance.Value;
+
+    private readonly ITerminalDriver _driver;
+    private readonly object _lock;
+
+    /// <inheritdoc/>
+    public string Name => _driver.Name;
+
+    /// <inheritdoc/>
+    public bool IsRawMode { get; private set; }
+
+    /// <inheritdoc/>
+    public event EventHandler<TerminalSignalEventArgs>? Signalled
     {
-        private static readonly Lazy<ITerminal> _instance;
+        add => _driver.Signalled += value;
+        remove => _driver.Signalled += value;
+    }
 
-        /// <summary>
-        /// Gets a lazily constructed, shared <see cref="ITerminal"/> instance.
-        /// </summary>
-        public static ITerminal Shared => _instance.Value;
+    /// <inheritdoc/>
+    public TerminalSize? Size => _driver.Size;
 
-        private readonly ITerminalDriver _driver;
-        private readonly object _lock;
+    /// <inheritdoc/>
+    public TerminalInput Input { get; }
 
-        /// <inheritdoc/>
-        public string Name => _driver.Name;
+    /// <inheritdoc/>
+    public TerminalOutput Output { get; }
 
-        /// <inheritdoc/>
-        public bool IsRawMode { get; private set; }
+    /// <inheritdoc/>
+    public TerminalOutput Error { get; }
 
-        /// <inheritdoc/>
-        public event EventHandler<TerminalSignalEventArgs>? Signalled
+    static Terminal()
+    {
+        _instance = new Lazy<ITerminal>(() => TerminalFactory.Create());
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Terminal"/> class.
+    /// </summary>
+    /// <param name="driver">The terminal driver.</param>
+    public Terminal(ITerminalDriver driver)
+    {
+        _driver = driver ?? throw new ArgumentNullException(nameof(driver));
+        _lock = new object();
+
+        Input = new TerminalInput(_driver.Input);
+        Output = new TerminalOutput(_driver.Output);
+        Error = new TerminalOutput(_driver.Error);
+    }
+
+    /// <summary>
+    /// Finalizes an instance of the <see cref="Terminal"/> class.
+    /// </summary>
+    ~Terminal()
+    {
+        Dispose();
+    }
+
+    /// <inheritdoc/>
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+
+        DisableRawMode();
+        _driver.Dispose();
+    }
+
+    /// <inheritdoc/>
+    public bool EmitSignal(TerminalSignal signal)
+    {
+        return _driver.EmitSignal(signal);
+    }
+
+    /// <inheritdoc/>
+    public bool EnableRawMode()
+    {
+        lock (_lock)
         {
-            add => _driver.Signalled += value;
-            remove => _driver.Signalled += value;
-        }
-
-        /// <inheritdoc/>
-        public TerminalSize? Size => _driver.Size;
-
-        /// <inheritdoc/>
-        public TerminalInput Input { get; }
-
-        /// <inheritdoc/>
-        public TerminalOutput Output { get; }
-
-        /// <inheritdoc/>
-        public TerminalOutput Error { get; }
-
-        static Terminal()
-        {
-            _instance = new Lazy<ITerminal>(() => TerminalFactory.Create());
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Terminal"/> class.
-        /// </summary>
-        /// <param name="driver">The terminal driver.</param>
-        public Terminal(ITerminalDriver driver)
-        {
-            _driver = driver ?? throw new ArgumentNullException(nameof(driver));
-            _lock = new object();
-
-            Input = new TerminalInput(_driver.Input);
-            Output = new TerminalOutput(_driver.Output);
-            Error = new TerminalOutput(_driver.Error);
-        }
-
-        /// <summary>
-        /// Finalizes an instance of the <see cref="Terminal"/> class.
-        /// </summary>
-        ~Terminal()
-        {
-            Dispose();
-        }
-
-        /// <inheritdoc/>
-        public void Dispose()
-        {
-            GC.SuppressFinalize(this);
-
-            DisableRawMode();
-            _driver.Dispose();
-        }
-
-        /// <inheritdoc/>
-        public bool EmitSignal(TerminalSignal signal)
-        {
-            return _driver.EmitSignal(signal);
-        }
-
-        /// <inheritdoc/>
-        public bool EnableRawMode()
-        {
-            lock (_lock)
+            if (IsRawMode)
             {
-                if (IsRawMode)
-                {
-                    return true;
-                }
-
-                IsRawMode = _driver.EnableRawMode();
-                return IsRawMode;
+                return true;
             }
+
+            IsRawMode = _driver.EnableRawMode();
+            return IsRawMode;
         }
+    }
 
-        /// <inheritdoc/>
-        public bool DisableRawMode()
+    /// <inheritdoc/>
+    public bool DisableRawMode()
+    {
+        lock (_lock)
         {
-            lock (_lock)
+            if (!IsRawMode)
             {
-                if (!IsRawMode)
-                {
-                    return true;
-                }
-
-                IsRawMode = !_driver.DisableRawMode();
-                return !IsRawMode;
+                return true;
             }
+
+            IsRawMode = !_driver.DisableRawMode();
+            return !IsRawMode;
         }
     }
 }

@@ -1,66 +1,60 @@
-using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices;
-using Microsoft.Windows.Sdk;
+namespace Spectre.Terminals.Drivers;
 
-namespace Spectre.Terminals.Drivers
+internal abstract class WindowsTerminalHandle : IDisposable
 {
-    internal abstract class WindowsTerminalHandle : IDisposable
+    private readonly object _lock;
+
+    public SafeHandle Handle { get; set; }
+    public bool IsRedirected { get; }
+
+    protected WindowsTerminalHandle(STD_HANDLE_TYPE handle)
     {
-        private readonly object _lock;
+        _lock = new object();
 
-        public SafeHandle Handle { get; set; }
-        public bool IsRedirected { get; }
+        Handle = PInvoke.GetStdHandle_SafeHandle(handle);
+        IsRedirected = !GetMode(out _) || (PInvoke.GetFileType(Handle) & 2) == 0;
+    }
 
-        protected WindowsTerminalHandle(STD_HANDLE_TYPE handle)
+    public void Dispose()
+    {
+        Handle.Dispose();
+    }
+
+    public unsafe bool GetMode([NotNullWhen(true)] out CONSOLE_MODE? mode)
+    {
+        if (PInvoke.GetConsoleMode(Handle, out var result))
         {
-            _lock = new object();
-
-            Handle = PInvoke.GetStdHandle_SafeHandle(handle);
-            IsRedirected = !GetMode(out _) || (PInvoke.GetFileType(Handle) & 2) == 0;
+            mode = result;
+            return true;
         }
 
-        public void Dispose()
-        {
-            Handle.Dispose();
-        }
+        mode = null;
+        return false;
+    }
 
-        public unsafe bool GetMode([NotNullWhen(true)] out CONSOLE_MODE? mode)
+    public unsafe bool AddMode(CONSOLE_MODE mode)
+    {
+        lock (_lock)
         {
-            if (PInvoke.GetConsoleMode(Handle, out var result))
+            if (GetMode(out var currentMode))
             {
-                mode = result;
-                return true;
+                return PInvoke.SetConsoleMode(Handle, currentMode.Value | mode);
             }
 
-            mode = null;
             return false;
         }
+    }
 
-        public unsafe bool AddMode(CONSOLE_MODE mode)
+    public unsafe bool RemoveMode(CONSOLE_MODE mode)
+    {
+        lock (_lock)
         {
-            lock (_lock)
+            if (GetMode(out var currentMode))
             {
-                if (GetMode(out var currentMode))
-                {
-                    return PInvoke.SetConsoleMode(Handle, currentMode.Value | mode);
-                }
-
-                return false;
+                return PInvoke.SetConsoleMode(Handle, currentMode.Value & ~mode);
             }
-        }
 
-        public unsafe bool RemoveMode(CONSOLE_MODE mode)
-        {
-            lock (_lock)
-            {
-                if (GetMode(out var currentMode))
-                {
-                    return PInvoke.SetConsoleMode(Handle, currentMode.Value & ~mode);
-                }
-
-                return false;
-            }
+            return false;
         }
     }
 }

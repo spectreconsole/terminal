@@ -1,40 +1,39 @@
 using Spectre.Terminals;
 
-namespace Examples
+namespace Examples;
+
+public static class Program
 {
-    public static class Program
+    public static void Main(string[] args)
     {
-        public static void Main(string[] args)
-        {
-            var terminal = Terminal.Shared;
+        var terminal = Terminal.Shared;
 
-            // Information
-            terminal.WriteLine("\u001b[2J\u001b[1;1HSpectre.Terminal");
-            terminal.WriteLine();
-            terminal.WriteLine($"  Terminal driver = {terminal.Name}");
-            terminal.WriteLine($"      Window size = {terminal.Size}");
-            terminal.WriteLine($"Output redirected = {terminal.Output.IsRedirected}");
-            terminal.WriteLine($"  Output encoding = {terminal.Output.Encoding.EncodingName}");
-            terminal.WriteLine($" Error redirected = {terminal.Error.IsRedirected}");
-            terminal.WriteLine($"   Error encoding = {terminal.Error.Encoding.EncodingName}");
-            terminal.WriteLine($" Input redirected = {terminal.Input.IsRedirected}");
-            terminal.WriteLine($"   Input encoding = {terminal.Input.Encoding.EncodingName}");
-            terminal.WriteLine();
-            terminal.WriteLine("Press ANY key");
-            terminal.WriteLine();
+        // Information
+        terminal.WriteLine("\u001b[2J\u001b[1;1HSpectre.Terminal");
+        terminal.WriteLine();
+        terminal.WriteLine($"  Terminal driver = {terminal.Name}");
+        terminal.WriteLine($"      Window size = {terminal.Size}");
+        terminal.WriteLine($"Output redirected = {terminal.Output.IsRedirected}");
+        terminal.WriteLine($"  Output encoding = {terminal.Output.Encoding.EncodingName}");
+        terminal.WriteLine($" Error redirected = {terminal.Error.IsRedirected}");
+        terminal.WriteLine($"   Error encoding = {terminal.Error.Encoding.EncodingName}");
+        terminal.WriteLine($" Input redirected = {terminal.Input.IsRedirected}");
+        terminal.WriteLine($"   Input encoding = {terminal.Input.Encoding.EncodingName}");
+        terminal.WriteLine();
+        terminal.WriteLine("Press ANY key");
+        terminal.WriteLine();
 
-            // Do some line manipulation
-            terminal.Write("\u001b[6;8H[Delete after]\u001b[0K");
-            terminal.Write("\u001b[5;15H\u001b[1K[Delete before]");
-            terminal.Write("\u001b[4;15H\u001b[2K[Delete line]");
+        // Do some line manipulation
+        terminal.Write("\u001b[6;8H[Delete after]\u001b[0K");
+        terminal.Write("\u001b[5;15H\u001b[1K[Delete before]");
+        terminal.Write("\u001b[4;15H\u001b[2K[Delete line]");
 
-            // Write some text in an alternate buffer
-            terminal.Write("\u001b[?1049h");
-            terminal.WriteLine("HELLO WORLD!");
-            terminal.Write("\u001b[?1049l");
-            terminal.Write("");
+        // Write some text in an alternate buffer
+        terminal.Write("\u001b[?1049h");
+        terminal.WriteLine("HELLO WORLD!");
+        terminal.Write("\u001b[?1049l");
+        terminal.Write("");
 
-            terminal.Output.WriteLine("Goodbye!");
-        }
+        terminal.Output.WriteLine("Goodbye!");
     }
 }
